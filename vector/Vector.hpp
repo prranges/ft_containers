@@ -51,26 +51,24 @@ namespace ft {
 
             /// DESTRUCTOR
             ~Vector() {
-                for (size_type i = 0; i < _size; i++)
-                    _alloc.destroy(_pointer + i);
+                clear();
                 if(_capacity)
                     _alloc.deallocate(_pointer, _capacity);
             }
 
             /// OPERATOR=
             Vector& operator= (const Vector& x) {
-                if (this == &x)
-                    return *this;
-                for (size_type i = 0; i < _size; i++)
-                    _alloc.destroy(_pointer + i);
-                this->_size = x._size;
-                if (_capacity && _size > _capacity) {
-                    _alloc.deallocate(_pointer, _capacity);
-                    _capacity = _size;
-                    _pointer = _alloc.allocate(_capacity);
+                if (this != &x) {
+                    clear();
+                    this->_size = x._size;
+                    if (_capacity && _size > _capacity) {
+                        _alloc.deallocate(_pointer, _capacity);
+                        _capacity = _size;
+                        _pointer = _alloc.allocate(_capacity);
+                    }
+                    for (size_type i = 0; i < _size; i++)
+                        _alloc.construct(_pointer + i, x[i]);
                 }
-                for (size_type i = 0; i < _size; i++)
-                    _alloc.construct(_pointer + i, x[i]);
                 return *this;
             }
 
@@ -119,7 +117,30 @@ namespace ft {
                 return _size == 0;
             }
 
-            void reserve (size_type n) {}
+            void reserve (size_type n) {
+                if (n > _capacity) {
+                    pointer tmp;
+                    try {
+                        tmp = _alloc.allocate(n);
+                    } catch (std::exception& e) {
+                        throw std::length_error(e.what());
+                    }
+                    try {
+                        for (size_type i = 0; i < _size; i++)
+                            _alloc.construct(tmp + i, _pointer[i]);
+                    } catch (std::exception& e) {
+                        for (size_type i = 0; tmp + i != NULL && i < _size; i++)
+                            _alloc.destroy(tmp + i);
+                        _alloc.deallocate(tmp, n);
+                    }
+                    for(size_type i = 0; i < _size; i++)
+                        _alloc.destroy(_pointer + i);
+                    if(_capacity)
+                        _alloc.deallocate(_pointer, _capacity);
+                    _capacity = n;
+                    _pointer = tmp;
+                }
+            }
 
             /// ELEMENT ACCESS
             reference operator[] (size_type n) {
@@ -166,10 +187,16 @@ namespace ft {
             void assign (size_type n, const value_type& val) {}
 
             void push_back (const value_type& val) {
-
+                if (_size == _capacity)
+                    reserve(_size + 1);;
+                _alloc.construct(_pointer + _size, val);
+                _size++;
             }
 
-            void pop_back() {}
+            void pop_back() {
+                _alloc.destroy(_pointer + _size - 1);
+                _size--;
+            }
 
             // insert - single element
             iterator insert (iterator position, const value_type& val) {}
@@ -184,12 +211,22 @@ namespace ft {
             iterator erase (iterator position) {}
             iterator erase (iterator first, iterator last) {}
 
-            void swap (Vector& x) {}
+            void swap (Vector& x) {
+                std::swap(this->_size, x._size);
+                std::swap(this->_pointer, x._pointer);
+                std::swap(this->_alloc, x._alloc);
+                std::swap(this->_capacity, x._capacity);
+            }
 
-            void clear() {}
+            void clear() {
+                for (; _size; --_size)
+                    _alloc.destroy(_pointer + _size);
+            }
 
             /// ALLOCATOR
-            allocator_type get_allocator() const {}
+            allocator_type get_allocator() const {
+                return _alloc;
+            }
     };
 
     /// RELATIONAL OPERATORS
