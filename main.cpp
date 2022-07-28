@@ -9,7 +9,6 @@ int main() {
 //    ft::Stack<int> ft_stack;
     ft::vector<int> V(5);
     ft::vector<int> VV;
-//    ft::vector<int> VV(5);
 
 //    std::vector<int> v(5);
 
@@ -25,6 +24,8 @@ int main() {
     V.push_back(999);
     V.push_back(1000);
     V.pop_back();
+
+    ft::vector<int> VVV(V);
 
 //    VV[0] = 555;
 //    VV[1] = 444;
@@ -84,10 +85,10 @@ int main() {
     std::cout << "reserve 100" << std::endl;
     V.reserve(100);
 
-    std::cout << "assign 500/33" << std::endl;
-    V.assign(500, 1);
-
-    std::cout << std::endl;
+//    std::cout << "assign 500/33" << std::endl;
+//    V.assign(500, 1);
+//
+//    std::cout << std::endl;
 
     std::cout << "size: " << V.size() << std::endl;
     std::cout << "capacity: " << V.capacity() << std::endl;
@@ -100,8 +101,8 @@ int main() {
     std::cout << "size: " << V.size() << std::endl;
     std::cout << "capacity: " << V.capacity() << std::endl;
 
-    for (ft::vector<int>::iterator it = V.begin(); it != V.end(); ++it) {
-        std::cout << *it << std::endl;
+    for (ft::vector<int>::iterator it = VVV.begin(); it != VVV.end(); ++it) {
+        std::cout << "yes " << *it << std::endl;
     }
 //
 //    std::cout << "\nAT" << std::endl;

@@ -3,9 +3,6 @@
 #include "Utils.hpp"
 #include "RA_Iterator.hpp"
 #include "RE_Iterator.hpp"
-//#include <memory>
-#include <iterator>
-#include <vector>
 
 namespace ft {
     template < class T, class Allocator = std::allocator<T> > class vector {
@@ -43,25 +40,34 @@ namespace ft {
                 _size(n),
                 _capacity(n),
                 _alloc(alloc) {
+                if (n > this->max_size())
+                    throw (std::length_error("vector"));
                 _pointer = _alloc.allocate(n);
-
                 for (size_type i = 0; i < n; i++)
                     _alloc.construct(_pointer + i, val);
             }
 
             /// range !!!!!!!!!!!!!!!!!!!!!!!!!!!
-            template <class Iterator> vector (Iterator first, Iterator last, const allocator_type& alloc = allocator_type()) {}
+            template <class Iterator> vector (Iterator first, Iterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<Iterator>::value, void>::type* = 0) :
+                _capacity(0),
+                _size(0),
+                _alloc(alloc),
+                _pointer(0) {
+                _pointer = alloc.allocate(_capacity);
+                this->assign(first, last);
+            };
 
             // copy
-            vector (const vector& x) {
-                *this = x;
-            }
+            vector(const vector& other) : _pointer(0), _capacity(other._capacity), _size(other._size), _alloc(other.get_allocator()) {
+                _pointer = _alloc.allocate(other._capacity);
+                for (size_t i = 0; i < _size; i++)
+                    _pointer[i] = other._pointer[i];
+            };
 
             /// DESTRUCTOR
             ~vector() {
                 clear();
-                if(_capacity)
-                    _alloc.deallocate(_pointer, _capacity);
+                _alloc.deallocate(_pointer, _capacity);
             }
 
             /// OPERATOR=
