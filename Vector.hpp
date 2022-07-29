@@ -88,37 +88,14 @@ namespace ft {
 
 
             /// ITERATORS
-            iterator begin() {
-                return iterator(_pointer);
-            }
-
-            const_iterator begin() const {
-                return const_iterator(_pointer);
-            }
-
-            iterator end() {
-                return iterator(_pointer + _size);
-            }
-
-            const_iterator end() const {
-                return const_iterator(_pointer);
-            }
-
-            reverse_iterator rbegin() {
-                return reverse_iterator(end());
-            }
-
-            const_reverse_iterator rbegin() const {
-                return const_reverse_iterator(end());
-            }
-
-            reverse_iterator rend() {
-                return reverse_iterator(begin());
-            }
-
-            const_reverse_iterator rend() const {
-                return const_reverse_iterator(begin());
-            }
+            iterator begin() { return iterator(_pointer); }
+            const_iterator begin() const { return const_iterator(_pointer); }
+            iterator end() { return iterator(_pointer + _size); }
+            const_iterator end() const { return const_iterator(_pointer); }
+            reverse_iterator rbegin() { return reverse_iterator(end()); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+            reverse_iterator rend() { return reverse_iterator(begin()); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
             /// CAPACITY
             size_type size() const {
@@ -129,7 +106,6 @@ namespace ft {
                 return _alloc.max_size();
             }
 
-            /// !!!!!!!!!!!!!!!!!!!!!!!!!!!
             void resize (size_type n, value_type val = value_type()) {
                 if (n > this->max_size())
                     throw (std::length_error("vector"));
@@ -251,15 +227,89 @@ namespace ft {
                 _size--;
             }
 
-            // insert - single element
-            iterator insert (iterator position, const value_type& val) {}
-
             // insert -  fill
-            void insert (iterator position, size_type n, const value_type& val) {}
+            void insert( iterator position, size_type n, const value_type& val) {
+                size_t dist = ft::distance(begin(), position);
+                size_t new_size = _size + n;
+                if (n >= _capacity) {
+                    reserve(_capacity + n);
+                    _size = new_size;
+                } else {
+                    for (; _size != new_size; ++_size) {
+                        if (_size == _capacity)
+                            reserve(_capacity * 2);
+                    }
+                }
+                for (size_t i = _size; i > 0; --i) {
+                    for (; n > 0 && i < dist + n && i >= dist; --n, --i) {
+                        _pointer[i] = val;
+                    }
+                    _pointer[i] = _pointer[i - n];
+                }
+            };
 
-            // insert -  range
-            template <class InputIterator>
-            void insert (iterator position, InputIterator first, InputIterator last) {}
+             //insert - single element
+            iterator insert (iterator position, const value_type& val) {
+                 size_t dist = ft::distance(begin(), position);
+                 insert(position, 1, val);
+                 return iterator(_pointer + dist);
+            }
+
+
+        // insert -  range
+        template <class InputIt>
+        typename ft::enable_if<!ft::is_integral<InputIt>::value, void>::type
+        insert( iterator position, InputIt first, InputIt last) {
+            size_t range_size = last - first;
+//            if (!validate_iterator_values(first, last, range_size))
+//                throw std::exception();
+            if (position < begin() || position > end() || first > last)
+                throw std::logic_error("vector");
+            size_t new_size = _size + range_size;
+
+            int last_index = (position - begin()) + range_size - 1;
+            if (range_size >= _capacity) {
+                reserve(_capacity + range_size);
+                _size = new_size;
+            } else {
+                while (_size != new_size) {
+                    if (_size == _capacity)
+                        reserve(_capacity * 2);
+                    _size++;
+                }
+            }
+            for (int i = _size - 1; i >= 0; --i) {
+                if (i == last_index) {
+                    for (; range_size > 0; --range_size, --i) {
+                        _pointer[i] = *--last;
+                    }
+                    return;
+                }
+                _pointer[i] = _pointer[i - range_size];
+            }
+        };
+//            template <class Iterator>
+//            void insert (iterator position, Iterator first, Iterator last, typename ft::enable_if<!ft::is_integral<Iterator>::value>::type* = 0) {
+//                // need to validate iterators
+//                size_t n = ft::distance(first, last);
+//                size_t dist = ft::distance(begin(), position);
+//                size_t new_size = _size + n;
+//                if (n >= _capacity) {
+//                    reserve(_capacity + n);
+//                    _size = new_size;
+//                } else {
+//                    for (; _size != new_size; ++_size) {
+//                        if (_size == _capacity)
+//                            reserve(_capacity * 2);
+//                    }
+//                }
+//                for (int i = _size - 1; i >= 0; --i) {
+//                    for (; n > 0 && i < dist + n && i >= dist; --n, --i) {
+//                        _pointer[i] = *--last;
+//                    }
+//                    _pointer[i] = _pointer[i - n];
+//                }
+//            }
 
             iterator erase (iterator position) {}
             iterator erase (iterator first, iterator last) {}

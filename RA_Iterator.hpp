@@ -94,7 +94,7 @@ namespace ft {
             }
 
             template <class Iterator1, class Iterator2>
-            friend bool	operator!= (const RA_Iterator<Iterator1>& a, const RA_Iterator<Iterator2>& b) {
+            friend bool	operator!=(const RA_Iterator<Iterator1>& a, const RA_Iterator<Iterator2>& b) {
                 return !(a._val == b._val);
             }
 

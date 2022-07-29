@@ -37,6 +37,14 @@ namespace ft {
     template <> struct is_integral<long long> : public ft::integral_constant<bool, true> {};
     template <> struct is_integral<unsigned long long> : public ft::integral_constant<bool, true> {};
 
+    // Distance between iterators
+    template <class Iterator1, class Iterator2>
+    size_t distance (Iterator1 first, Iterator2 last) {
+        size_t distance = 0;
+        for (; first != last; ++first, ++distance);
+        return distance;
+    }
+
     // Lexicographical comparison
     template <class Iterator1, class Iterator2>
     bool lexicographical_compare (Iterator1 first1, Iterator1 last1, Iterator2 first2, Iterator2 last2)
