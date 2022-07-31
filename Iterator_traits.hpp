@@ -6,12 +6,6 @@
 
 namespace ft {
 
-//    struct input_iterator_tag {};
-//    struct output_iterator_tag {};
-//    struct forward_iterator_tag : public input_iterator_tag, public output_iterator_tag {};
-//    struct bidirectional_iterator_tag : public forward_iterator_tag {};
-//    struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-
     /// TEMPLATE
     template <class Iterator> struct iterator_traits {
         typedef typename Iterator::difference_type      difference_type;
@@ -23,7 +17,7 @@ namespace ft {
 
     // Specialization for pointer
     template <class T> struct iterator_traits<T*> {
-        typedef ptrdiff_t                               difference_type;
+        typedef std::ptrdiff_t                               difference_type;
         typedef T                                       value_type;
         typedef T*                                      pointer;
         typedef T&                                      reference;
@@ -32,7 +26,7 @@ namespace ft {
 
     // Specialization for constant pointer
     template <class T> struct iterator_traits <const T*> {
-        typedef ptrdiff_t								difference_type;
+        typedef std::ptrdiff_t								difference_type;
         typedef T									    value_type;
         typedef const T*								pointer;
         typedef const T&								reference;

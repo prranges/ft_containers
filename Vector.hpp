@@ -1,6 +1,6 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
-#include "Utils.hpp"
+#include "Utility.hpp"
 #include "RA_Iterator.hpp"
 #include "RE_Iterator.hpp"
 
@@ -215,16 +215,15 @@ namespace ft {
 
             void push_back (const value_type& val) {
                 if (_size == _capacity) {
-                    int new_capacity = (size() > 0) ? (int)(size() * 2) : 1;
-                    reserve(new_capacity);
+                    reserve(_capacity > 0 ? _capacity * 2 : 1);
                 }
                 _alloc.construct(_pointer + _size, val);
-                _size++;
+                ++_size;
             }
 
             void pop_back() {
                 _alloc.destroy(_pointer + _size - 1);
-                _size--;
+                --_size;
             }
 
             // insert -  fill
@@ -263,8 +262,8 @@ namespace ft {
             size_t range_size = last - first;
 //            if (!validate_iterator_values(first, last, range_size))
 //                throw std::exception();
-            if (position < begin() || position > end() || first > last)
-                throw std::logic_error("vector");
+//            if (position < begin() || position > end() || first > last)
+//                throw std::logic_error("vector");
             size_t new_size = _size + range_size;
 
             int last_index = (position - begin()) + range_size - 1;
@@ -314,11 +313,11 @@ namespace ft {
             iterator erase (iterator position) {}
             iterator erase (iterator first, iterator last) {}
 
-            void swap (vector& x) {
-                std::swap(this->_size, x._size);
-                std::swap(this->_pointer, x._pointer);
-                std::swap(this->_alloc, x._alloc);
-                std::swap(this->_capacity, x._capacity);
+            void swap(vector& other) {
+                std::swap(_size, other._size);
+                std::swap(_capacity, other._capacity);
+                std::swap(_pointer, other._pointer);
+                std::swap(_alloc, other._alloc);
             }
 
             void clear() {
@@ -330,6 +329,7 @@ namespace ft {
             allocator_type get_allocator() const {
                 return _alloc;
             }
+//            friend bool operator<  (const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs);
     };
 
     /// RELATIONAL OPERATORS
@@ -350,7 +350,15 @@ namespace ft {
 
     template <class T, class Allocator>
     bool operator<  (const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs) {
-        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        if (lhs.size() < rhs.size()) return true;
+        if (lhs.size() > rhs.size()) return false;
+
+        for (size_t i = 0; i < lhs.size(); ++i) {
+            if (lhs[i] == rhs[i]) { continue; }
+            return lhs[i] < rhs[i];
+        }
+        return false;
+//        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
     }
 
     template <class T, class Allocator>

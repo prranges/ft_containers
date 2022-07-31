@@ -4,16 +4,16 @@
 #include "Iterator_traits.hpp"
 
 namespace ft {
-    template <class Iterator> class RE_Iterator {
+    template <class T> class RE_Iterator {
         private:
-            Iterator _base_iterator;
+            T _base_iterator;
         public:
-            typedef	Iterator	iterator_type;
-            typedef typename iterator_traits<Iterator>::value_type value_type;
-            typedef typename iterator_traits<Iterator>::difference_type difference_type;
-            typedef typename iterator_traits<Iterator>::pointer pointer;
-            typedef typename iterator_traits<Iterator>::reference reference;
-            typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
+            typedef T                                                           iterator_type;
+            typedef typename iterator_traits<iterator_type>::value_type         value_type;
+            typedef typename iterator_traits<iterator_type>::difference_type    difference_type;
+            typedef typename iterator_traits<iterator_type>::pointer            pointer;
+            typedef typename iterator_traits<iterator_type>::reference          reference;
+            typedef typename iterator_traits<iterator_type>::iterator_category  iterator_category;
 
         /// CONSTRUCTORS
         RE_Iterator() : _base_iterator() {}
