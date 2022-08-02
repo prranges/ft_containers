@@ -2,13 +2,15 @@
 #include "Stack.hpp"
 #include "Vector.hpp"
 #include <vector>
-#include <list>
+#include <algorithm>
 
 int main() {
 
+
+
 //    ft::Stack<int> ft_stack;
-    ft::vector<int> V(5);
-    ft::vector<int> VV;
+//    ft::vector<int> V(5);
+//    ft::vector<int> VV(5);
 
     //insert
     std::vector<int> s;
@@ -17,8 +19,11 @@ int main() {
         s.push_back(i+1);
         f.push_back(i+1);
     }
-//    s.assign(6, 1);
-//    f.assign(6, 1);
+//    V.assign(1, 1);
+//    VV.assign(1, 2);
+//    VV.swap(V);
+//    std::cout << "VV: " << VV[0] << std::endl;
+//    std::cout << "V: " << V[0] << std::endl;
 
     s.insert(s.begin()+3, 3, 1000);
     f.insert(f.begin()+3, 3, 1000);
