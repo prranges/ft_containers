@@ -17,7 +17,7 @@ namespace ft {
         public:
 
             /// CONSTRUCTORS
-            RA_Iterator() : _val() {}
+            RA_Iterator() : _val(nullptr) {}
             explicit RA_Iterator(T val) : _val(val) {}
             RA_Iterator(const RA_Iterator& other) : _val(other._val) {}
 
@@ -33,7 +33,7 @@ namespace ft {
 
             template <class Iterator>
             RA_Iterator& operator= (RA_Iterator<Iterator> const & other) {
-                _val = & (* other);
+                _val = & (*other);
                 return *this;
             }
 

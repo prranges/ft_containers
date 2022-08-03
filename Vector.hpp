@@ -74,7 +74,7 @@ namespace ft {
                 if (this != &x) {
                     clear();
                     this->_size = x._size;
-                    if (_capacity && _size > _capacity) {
+                    if (_size > _capacity) {
                         _alloc.deallocate(_pointer, _capacity);
                         _capacity = _size;
                         _pointer = _alloc.allocate(_capacity);
@@ -135,16 +135,16 @@ namespace ft {
                         throw std::length_error(e.what());
                     }
                     try {
-                        for (size_type i = 0; i < _size; i++)
+                        for (size_type i = 0; i < _size; ++i)
                             _alloc.construct(tmp + i, _pointer[i]);
                     } catch (std::exception& e) {
-                        for (size_type i = 0; tmp + i != NULL && i < _size; i++)
+                        for (size_type i = 0; tmp + i != NULL && i < _size; ++i)
                             _alloc.destroy(tmp + i);
                         _alloc.deallocate(tmp, n);
                     }
-                    for(size_type i = 0; i < _size; i++)
+                    for(size_type i = 0; i < _size; ++i)
                         _alloc.destroy(_pointer + i);
-                    if(_capacity)
+                    if(_pointer)
                         _alloc.deallocate(_pointer, _capacity);
                     _capacity = n;
                     _pointer = tmp;
@@ -210,7 +210,7 @@ namespace ft {
 
             void push_back (const value_type& val) {
                 if (_size == _capacity)
-                    reserve(_capacity > 0 ? _capacity * 2 : 1);
+                    reserve(_capacity ? _capacity * 2 : 1);
                 _alloc.construct(_pointer + _size, val);
                 ++_size;
             }
@@ -222,7 +222,7 @@ namespace ft {
 
             // insert -  fill
             void insert( iterator position, size_type n, const value_type& val) {
-                difference_type dist = ft::distance(begin(), position);
+                difference_type dist = position - begin();
                 difference_type new_size = _size + n;
                 if (n >= _capacity) {
                     reserve(_capacity + n);
@@ -241,130 +241,71 @@ namespace ft {
                 }
             };
 
-             //insert - single element
+            //insert - single element
             iterator insert (iterator position, const value_type& val) {
-                 difference_type dist = ft::distance(begin(), position);
+                 size_t dist = position - begin();
                  insert(position, 1, val);
                  return iterator(_pointer + dist);
             }
 
-
-        // insert -  range
-        template <class InputIterator>
-        void insert (iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value>::type* = 0){
-
-            if (position < begin() || position > end() || first > last)
-                throw std::logic_error("vector");
-            size_type start = static_cast<size_type>(position - begin());
-            size_type count = static_cast<size_type>(last - first);
-            if (_size + count > _capacity) {
-                size_type new_cap = _capacity * 2 >= _size + count ? _capacity * 2 : _size + count;
-                pointer new_arr = _alloc.allocate(new_cap);
-                std::uninitialized_copy(begin(), position, iterator(new_arr));
-                try {
-                    for (size_type i = 0; i < static_cast<size_type>(count); i++, first++)
-                        _alloc.construct(new_arr + start + i, *first);
+            // insert -  range
+            template <class Iterator>
+            void insert (iterator position, Iterator first, Iterator last, typename ft::enable_if<!ft::is_integral<Iterator>::value>::type* = 0) {
+                size_t range = last - first;
+                pointer tmp_pointer = _alloc.allocate(range);
+                bool result = true;
+                size_t i = 0;
+                for (;first != last; ++first, ++i) {
+                    try {
+                        tmp_pointer[i] = *first;
+                    }
+                    catch (...) {
+                        result = false; break;
+                    }
                 }
-                catch (...){
-                    for (size_type i = 0; i < count + start; ++i)
-                        _alloc.destroy(new_arr + i);
-                    _alloc.deallocate(new_arr, new_cap);
-                    throw;
+                _alloc.deallocate(tmp_pointer, range);
+                if (!result) {
+                    throw std::exception();
                 }
-                std::uninitialized_copy(position, end(), iterator(new_arr + start + count));
-                for (size_type i = 0; i < _size; i++)
-                    _alloc.destroy(_pointer + i);
-                _alloc.deallocate(_pointer, _capacity);
-                _size += count;
-                _capacity = new_cap;
-                _pointer = new_arr;
-            }
-            else {
-                for (size_type i = _size; i > static_cast<size_type>(start); i--) {
-                    _alloc.destroy(_pointer + i + count - 1);
-                    _alloc.construct(_pointer + i + count - 1, *(_pointer + i - 1));
+
+                size_t dist = position - begin();
+                size_t new_size = _size + range;
+                    if (range >= _capacity) {
+                        reserve(_capacity + range);
+                        _size = new_size;
+                    } else {
+                        for (; _size != new_size; ++_size) {
+                            if (_size == _capacity)
+                                reserve(_capacity * 2);
+                        }
+                    }
+                for (int i = _size - 1; i >= 0; --i) {
+                    if (i == dist + range - 1) {
+                        for (; range > 0; --range, --i) {
+                            _pointer[i] = *--last;
+                        }
+                        return;
+                    }
+                    _pointer[i] = _pointer[i - range];
                 }
-                for (size_type i = 0; i < static_cast<size_type>(count); i++, first++) {
-                    _alloc.destroy(_pointer + i + count);
-                    _alloc.construct(_pointer + start + i, *first);
+            }
+
+            // single element
+            iterator erase(iterator position) {
+                return erase(position, position + 1);
+            }
+
+            // range
+            iterator erase( iterator first, iterator last ) {
+                size_t start = first - begin();
+                size_t end = last - begin();
+                size_t offset = end - start;
+                _size -= offset;
+                for (size_t i = start; i < _size; ++i) {
+                    _pointer[i] = _pointer[i + offset];
                 }
-                _size += count;
+                return iterator(_pointer + start);
             }
-        }
-//        template <class InputIt>
-//        typename ft::enable_if<!ft::is_integral<InputIt>::value, void>::type
-//        insert( iterator position, InputIt first, InputIt last) {
-//            size_t range_size = last - first;
-////            if (!validate_iterator_values(first, last, range_size))
-////                throw std::exception();
-//            if (position < begin() || position > end() || first > last)
-//                throw std::logic_error("vector");
-//            size_t new_size = _size + range_size;
-//
-//            int last_index = (position - begin()) + range_size - 1;
-//            if (range_size >= _capacity) {
-//                reserve(_capacity + range_size);
-//                _size = new_size;
-//            } else {
-//                while (_size != new_size) {
-//                    if (_size == _capacity)
-//                        reserve(_capacity * 2);
-//                    _size++;
-//                }
-//            }
-//            for (int i = _size - 1; i >= 0; --i) {
-//                if (i == last_index) {
-//                    for (; range_size > 0; --range_size, --i) {
-//                        _pointer[i] = *--last;
-//                    }
-//                    return;
-//                }
-//                _pointer[i] = _pointer[i - range_size];
-//            }
-//        };
-//            template <class Iterator>
-//            void insert (iterator position, Iterator first, Iterator last, typename ft::enable_if<!ft::is_integral<Iterator>::value>::type* = 0) {
-//                // need to validate iterators
-//                size_t n = ft::distance(first, last);
-//                size_t dist = ft::distance(begin(), position);
-//                size_t new_size = _size + n;
-//                if (n >= _capacity) {
-//                    reserve(_capacity + n);
-//                    _size = new_size;
-//                } else {
-//                    for (; _size != new_size; ++_size) {
-//                        if (_size == _capacity)
-//                            reserve(_capacity * 2);
-//                    }
-//                }
-//                for (int i = _size - 1; i >= 0; --i) {
-//                    for (; n > 0 && i < dist + n && i >= dist; --n, --i) {
-//                        _pointer[i] = *--last;
-//                    }
-//                    _pointer[i] = _pointer[i - n];
-//                }
-//            }
-
-        iterator erase( iterator position ) {
-            difference_type i = ft::distance(begin(), position);
-            for (; i < _size; ++i) {
-                _pointer[i] = _pointer[i + 1];
-            }
-            --_size;
-            return position;
-        }
-
-        iterator erase( iterator first, iterator last ) {
-            int start = first - begin();
-            int end = last - begin();
-            int offset = end - start;
-
-            _size -= offset;
-            for (size_t i = start; i < _size; ++i) {
-                _pointer[i] = _pointer[i + offset];
-            }
-            return _pointer + start;
-        }
 
             void swap(vector& other) {
                 std::swap(_size, other._size);
@@ -427,10 +368,11 @@ namespace ft {
     bool operator>= (const vector<T, Allocator>& lhs, const vector<T, Allocator>& rhs) {
         return !(lhs < rhs);
     }
-
+} // ft
+namespace std{
     /// SWAP
-    template <class T, class Alloc>
-    void swap (vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) {
+    template< class T, class Alloc >
+    void swap(ft::vector<T,Alloc>& lhs, ft::vector<T,Alloc>& rhs ) {
         lhs.swap(rhs);
     }
 }

@@ -2,46 +2,71 @@
 #include "Stack.hpp"
 #include "Vector.hpp"
 #include <vector>
-#include <algorithm>
 
 int main() {
+    int _ratio = 1;
 
+        ft::stack<int> stk;
+        std::vector<int> v;
+        ft::vector<int> deque;
+        for (int i = 0; i < 100 * _ratio; ++i)
+            deque.push_back(i);
+        for (int i = 100 * _ratio; i < 200 * _ratio; ++i)
+            stk.push(i);
+        ft::stack<int> stack(deque);
+        ft::stack<int> stack2(stk);
+        ft::stack<int> stack3;
+        stack3 = stack2;
+        for (size_t i = 0; i < stack2.size(); ++i) {
+            std::cout << "s " << stack2.top() << " " << stack3.top() << std::endl;
+            stack2.pop();
+            stack3.pop();
+        }
+//        ft::stack<int> stack3;
+//        stack3 = stack2;
+//        while (stack.size() > 0) {
+//            v.push_back(stack.top());
+//            stack.pop();
+//        }
+//        while (stack2.size() > 0) {
+//            v.push_back(stack2.top());
+//            stack2.pop();
+//        }
 
-
-//    ft::Stack<int> ft_stack;
-//    ft::vector<int> V(5);
-//    ft::vector<int> VV(5);
-
-    //insert
-    std::vector<int> s;
-    ft::vector<int> f;
-    for (int i = 0; i < 8; ++i) {
-        s.push_back(i+1);
-        f.push_back(i+1);
-    }
-//    V.assign(1, 1);
-//    VV.assign(1, 2);
-//    VV.swap(V);
-//    std::cout << "VV: " << VV[0] << std::endl;
-//    std::cout << "V: " << V[0] << std::endl;
-
-    s.insert(s.begin()+3, 3, 1000);
-    f.insert(f.begin()+3, 3, 1000);
-
-
-    for (std::vector<int>::iterator it = s.begin(); it != s.end(); ++it) {
-        std::cout << "s " << *it << std::endl;
-    }
-    std::cout << "size: " << s.size() << std::endl;
-    std::cout << "capacity: " << s.capacity() << std::endl;
-
-    std::cout << std::endl;
-
-    for (ft::vector<int>::iterator it = f.begin(); it != f.end(); ++it) {
-        std::cout << "f " << *it << std::endl;
-    }
-    std::cout << "size: " << f.size() << std::endl;
-    std::cout << "capacity: " << f.capacity() << std::endl;
+////    ft::Stack<int> ft_stack;
+////    ft::vector<int> V(5);
+////    ft::vector<int> VV(5);
+//
+//    //insert
+//    std::vector<int> s;
+//    ft::vector<int> f;
+//    for (int i = 0; i < 8; ++i) {
+//        s.push_back(i+1);
+//        f.push_back(i+1);
+//    }
+////    V.assign(1, 1);
+////    VV.assign(1, 2);
+////    VV.swap(V);
+////    std::cout << "VV: " << VV[0] << std::endl;
+////    std::cout << "V: " << V[0] << std::endl;
+//
+//    s.insert(s.begin()+3, 3, 1000);
+//    f.insert(f.begin()+3, 3, 1000);
+//
+//
+//    for (std::vector<int>::iterator it = s.begin(); it != s.end(); ++it) {
+//        std::cout << "s " << *it << std::endl;
+//    }
+//    std::cout << "size: " << s.size() << std::endl;
+//    std::cout << "capacity: " << s.capacity() << std::endl;
+//
+//    std::cout << std::endl;
+//
+//    for (ft::vector<int>::iterator it = f.begin(); it != f.end(); ++it) {
+//        std::cout << "f " << *it << std::endl;
+//    }
+//    std::cout << "size: " << f.size() << std::endl;
+//    std::cout << "capacity: " << f.capacity() << std::endl;
 
 //    std::vector<int> v(5);
 
