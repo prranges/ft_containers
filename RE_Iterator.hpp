@@ -1,6 +1,4 @@
-#ifndef RE_ITERATOR_HPP
-#define RE_ITERATOR_HPP
-
+#pragma once
 #include "Iterator_traits.hpp"
 
 namespace ft {
@@ -129,7 +127,4 @@ namespace ft {
     RE_Iterator<Iterator> operator+ (typename RE_Iterator<Iterator>::difference_type n, const RE_Iterator<Iterator>& iter) {
         return RE_Iterator<Iterator>(iter + n);
     }
-
 }
-
-#endif

@@ -1,6 +1,4 @@
-#ifndef RA_ITERATOR_HPP
-#define RA_ITERATOR_HPP
-
+#pragma once
 #include "Iterator_traits.hpp"
 
 namespace ft {
@@ -138,5 +136,3 @@ namespace ft {
         return RA_Iterator<Iterator>(iter + n);
     }
 }
-
-#endif

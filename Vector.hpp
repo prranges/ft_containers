@@ -1,5 +1,4 @@
-#ifndef VECTOR_HPP
-#define VECTOR_HPP
+#pragma once
 #include "Utility.hpp"
 #include "RA_Iterator.hpp"
 #include "RE_Iterator.hpp"
@@ -376,5 +375,3 @@ namespace std{
         lhs.swap(rhs);
     }
 }
-
-#endif

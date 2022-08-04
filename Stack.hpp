@@ -1,5 +1,4 @@
-#ifndef STACK_HPP
-#define STACK_HPP
+#pragma once
 #include "Vector.hpp"
 
 namespace ft {
@@ -70,5 +69,3 @@ namespace ft {
         }
     };
 }
-
-#endif
