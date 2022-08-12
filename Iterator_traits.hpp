@@ -17,7 +17,7 @@ namespace ft {
 
     // Specialization for pointer
     template <class T> struct iterator_traits<T*> {
-        typedef std::ptrdiff_t                          difference_type;
+        typedef ptrdiff_t                               difference_type;
         typedef T                                       value_type;
         typedef T*                                      pointer;
         typedef T&                                      reference;
@@ -26,7 +26,7 @@ namespace ft {
 
     // Specialization for constant pointer
     template <class T> struct iterator_traits <const T*> {
-        typedef std::ptrdiff_t							difference_type;
+        typedef ptrdiff_t							    difference_type;
         typedef T									    value_type;
         typedef const T*								pointer;
         typedef const T&								reference;

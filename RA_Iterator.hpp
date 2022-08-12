@@ -3,92 +3,91 @@
 
 namespace ft {
     template <class T> class RA_Iterator {
-        public:
-            typedef T                                                           iterator_type;
-            typedef typename iterator_traits<iterator_type>::difference_type    difference_type;
-            typedef typename iterator_traits<iterator_type>::value_type         value_type;
-            typedef typename iterator_traits<iterator_type>::pointer            pointer;
-            typedef typename iterator_traits<iterator_type>::reference          reference;
-            typedef typename iterator_traits<iterator_type>::iterator_category  iterator_category;
-        private:
-            iterator_type _val;
-        public:
+    private:
+        T _val;
+    public:
+        typedef T                                               iterator_type;
+        typedef typename iterator_traits<T>::difference_type    difference_type;
+        typedef typename iterator_traits<T>::value_type         value_type;
+        typedef typename iterator_traits<T>::pointer            pointer;
+        typedef typename iterator_traits<T>::reference          reference;
+        typedef typename iterator_traits<T>::iterator_category  iterator_category;
 
-            /// CONSTRUCTORS
-            RA_Iterator() : _val(nullptr) {}
-            explicit RA_Iterator(T val) : _val(val) {}
-            RA_Iterator(const RA_Iterator& other) : _val(other._val) {}
-
-
-            /// DESTRUCTOR
-            virtual ~RA_Iterator() {}
-
-            /// OPERATORS
-            template <class Type>
-            operator RA_Iterator<Type>() const {
-                return RA_Iterator<Type>(_val);
-            }
-
-            template <class Iterator>
-            RA_Iterator& operator= (RA_Iterator<Iterator> const & other) {
-                _val = & (*other);
-                return *this;
-            }
-
-            RA_Iterator& operator++ () {
-                ++_val;
-                return *this;
-            }
-
-            RA_Iterator operator++ (int) {
-                RA_Iterator tmp(*this);
-                ++_val;
-                return tmp;
-            }
-
-            RA_Iterator operator+ (difference_type n) const {
-                return RA_Iterator(_val + n);
-            }
-
-            RA_Iterator operator+= (difference_type n) {
-                _val += n;
-                return *this;
-            }
+        /// CONSTRUCTORS
+        RA_Iterator() : _val(nullptr) {}
+        explicit RA_Iterator(T val) : _val(val) {}
+        RA_Iterator(const RA_Iterator& other) : _val(other._val) {}
 
 
-            RA_Iterator& operator-- () {
-                --_val;
-                return *this;
-            }
+        /// DESTRUCTOR
+        virtual ~RA_Iterator() {}
 
-            RA_Iterator operator-- (int) {
-                RA_Iterator tmp(*this);
-                --_val;
-                return tmp;
-            }
+        /// OPERATORS
+        template <class Type>
+        operator RA_Iterator<Type>() const {
+            return RA_Iterator<Type>(_val);
+        }
 
-            RA_Iterator operator- (difference_type n) const {
-                return RA_Iterator(_val - n);
-            }
+        template <class Iterator>
+        RA_Iterator& operator= (RA_Iterator<Iterator> const & other) {
+            _val = & (*other);
+            return *this;
+        }
 
-            RA_Iterator operator-= (difference_type n) {
-                _val -= n;
-                return *this;
-            }
+        RA_Iterator& operator++ () {
+            ++_val;
+            return *this;
+        }
 
-            reference operator[] (difference_type n) const {
-                return *(_val + n);
-            }
+        RA_Iterator operator++ (int) {
+            RA_Iterator tmp(*this);
+            ++_val;
+            return tmp;
+        }
 
-            reference operator* () const {
-                return *_val;
-            }
+        RA_Iterator operator+ (difference_type n) const {
+            return RA_Iterator(_val + n);
+        }
 
-            pointer operator-> () const {
-                return _val;
-            }
+        RA_Iterator operator+= (difference_type n) {
+            _val += n;
+            return *this;
+        }
 
-            iterator_type base() const { return _val; }
+
+        RA_Iterator& operator-- () {
+            --_val;
+            return *this;
+        }
+
+        RA_Iterator operator-- (int) {
+            RA_Iterator tmp(*this);
+            --_val;
+            return tmp;
+        }
+
+        RA_Iterator operator- (difference_type n) const {
+            return RA_Iterator(_val - n);
+        }
+
+        RA_Iterator operator-= (difference_type n) {
+            _val -= n;
+            return *this;
+        }
+
+        reference operator[] (difference_type n) const {
+            return *(_val + n);
+        }
+
+        reference operator* () const {
+            return *_val;
+        }
+
+        pointer operator-> () const {
+            return _val;
+        }
+
+        iterator_type base() const { return _val; }
     };
 
     template <class Iterator1, class Iterator2>

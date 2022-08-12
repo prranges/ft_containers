@@ -1,27 +1,39 @@
 #include <iostream>
 #include "Stack.hpp"
 #include "Vector.hpp"
+#include "Map.hpp"
+
+#include "RB_Tree.hpp"
+
 #include <vector>
+#include <list>
+#include <map>
+
+#include "BD_Iterator.hpp"
 
 int main() {
-    int _ratio = 1;
+    std::vector<int> x;
+    x.assign(10, 777);
 
-        ft::stack<int> stk;
-        std::vector<int> v;
-        ft::vector<int> deque;
-        for (int i = 0; i < 100 * _ratio; ++i)
-            deque.push_back(i);
-        for (int i = 100 * _ratio; i < 200 * _ratio; ++i)
-            stk.push(i);
-        ft::stack<int> stack(deque);
-        ft::stack<int> stack2(stk);
-        ft::stack<int> stack3;
-        stack3 = stack2;
-        for (size_t i = 0; i < stack2.size(); ++i) {
-            std::cout << "s " << stack2.top() << " " << stack3.top() << std::endl;
-            stack2.pop();
-            stack3.pop();
-        }
+    std::map<int, int> m;
+
+    ft::map<int, int> M; // FT
+
+    m.insert(std::make_pair(4, 1));
+    m.insert(std::make_pair(2, 2));
+    m.insert(std::make_pair(5, 3));
+    m.insert(std::make_pair(3, 4));
+    m.insert(std::make_pair(1, 5));
+
+    std::map<int, int>::iterator it;
+
+    for (it = m.begin(); it != m.end(); ++it)
+        std::cout << it->first << " : " << it->second << std::endl;
+    it = m.begin();
+    it--;
+    std::cout << it->first << " : " << it->second << std::endl;
+
+
 //        ft::stack<int> stack3;
 //        stack3 = stack2;
 //        while (stack.size() > 0) {

@@ -5,6 +5,7 @@
 #include "BD_Iterator.hpp"
 #include "RE_Iterator.hpp"
 #include "Utility.hpp"
+#include "RB_Tree.hpp"
 
 namespace ft {
     template<class Key, class T, class Compare = ft::less <Key>, class Alloc = std::allocator <std::pair<const Key, T> > >
@@ -33,17 +34,17 @@ namespace ft {
 
     public:
         typedef pair_compare                                            value_compare;
-        typedef ft::RB_Tree<value_type, pair_compare, allocator_type>   tree_type;
-        typedef ft::BD_Iterator<value_type>                             iterator;
-        typedef ft::BD_Iterator<const value_type>                       const_iterator;
+        typedef ft::RB_Tree<T>                                          tree_type;
+        typedef ft::BD_Iterator<T*>                                     iterator;
+        typedef ft::BD_Iterator<const T*>                               const_iterator;
         typedef ft::RE_Iterator<iterator>			                    reverse_iterator;
         typedef	ft::RE_Iterator<const_iterator>	                        const_reverse_iterator;
         typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
         typedef difference_type                                         size_type;
     private:
-        allocator_type _alloc;
-        tree_type _tree;
-        key_compare _compare;
+        allocator_type  _alloc;
+        tree_type       _tree;
+        key_compare     _compare;
     public:
         /// Constructors
         // empty
