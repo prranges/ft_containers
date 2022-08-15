@@ -8,30 +8,61 @@
 #include <vector>
 #include <list>
 #include <map>
-
 #include "BD_Iterator.hpp"
 
 int main() {
-    std::vector<int> x;
-    x.assign(10, 777);
 
-    std::map<int, int> m;
+    /// FT
 
-    ft::map<int, int> M; // FT
+    ft::pair<int, int> q = ft::make_pair(111,222);
+    ft::pair<int, int> w = ft::make_pair(222,111);
+    std::cout << q.first << " : " << q.second << std::endl;
+    std::cout << w.first << " : " << w.second << std::endl;
 
-    m.insert(std::make_pair(4, 1));
-    m.insert(std::make_pair(2, 2));
-    m.insert(std::make_pair(5, 3));
-    m.insert(std::make_pair(3, 4));
-    m.insert(std::make_pair(1, 5));
 
-    std::map<int, int>::iterator it;
+    ft::Node<ft::pair<int, int> > node;
+    node.pair = &q;
+    std::cout << node.pair->first << " : " << node.pair->second << std::endl;
+    std::cout << node.left << " : " << node.right << std::endl;
 
-    for (it = m.begin(); it != m.end(); ++it)
-        std::cout << it->first << " : " << it->second << std::endl;
-    it = m.begin();
-    it--;
-    std::cout << it->first << " : " << it->second << std::endl;
+    ft::map<int, int> s;
+    s.insert(node);
+//    ft::RB_Tree<ft::pair<int, int> > rbt;
+//    rbt.insertFixup(node);
+//    std::cout << "hello" << std::endl;
+
+
+//    rbt.insertFixup(ft::make_pair(222,111);;
+//    rbt.insertFixup(ft::make_pair(333,333));
+
+//    ft::map<int, int>::iterator IT;
+//    IT = rbt.begin();
+
+//    std::cout << IT->first << " : " << IT->second << std::endl;
+
+//    ft::map<int, int> M; // FT
+//    M.insert(ft::make_pair(4, 1));
+//    M.insert(ft::make_pair(2, 2));
+//    M.insert(ft::make_pair(5, 3));
+//    M.insert(ft::make_pair(3, 4));
+//    M.insert(ft::make_pair(1, 5));
+//
+//    ft::map<int, int>::iterator IT;
+//
+//    for (IT = M.begin(); IT != M.end(); ++IT)
+//        std::cout << IT->first << " : " << IT->second << std::endl;
+
+//    /// STD
+//
+//    std::map<int, int> m;
+//    m.insert(std::make_pair(4, 1));
+//    m.insert(std::make_pair(2, 2));
+//    m.insert(std::make_pair(5, 3));
+//    m.insert(std::make_pair(3, 4));
+//    m.insert(std::make_pair(1, 5));
+//    std::map<int, int>::iterator it;
+//    for (it = m.begin(); it != m.end(); ++it)
+//        std::cout << it->first << " : " << it->second << std::endl;
 
 
 //        ft::stack<int> stack3;

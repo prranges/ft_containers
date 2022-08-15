@@ -8,16 +8,16 @@
 #include "RB_Tree.hpp"
 
 namespace ft {
-    template<class Key, class T, class Compare = ft::less <Key>, class Alloc = std::allocator <std::pair<const Key, T> > >
+    template<class Key, class T, class Compare = ft::less <Key>, class Alloc = std::allocator <ft::pair<const Key, T> > >
     class map {
     public:
         typedef Key                                         key_type;
         typedef T                                           mapped_type;
-        typedef std::pair<const key_type, mapped_type>      value_type;
+        typedef ft::pair<const key_type, mapped_type>       value_type;
         typedef Compare                                     key_compare;
         typedef Alloc                                       allocator_type;
-        typedef typename allocator_type::reference          reference;
-        typedef typename allocator_type::const_reference    const_reference;
+        typedef value_type&                                 reference;
+        typedef const value_type&                           const_reference;
         typedef typename allocator_type::pointer            pointer;
         typedef typename allocator_type::const_pointer      const_pointer;
 
@@ -31,16 +31,20 @@ namespace ft {
                 return (_compare(x.first, y.first));
             }
         };
-
     public:
         typedef pair_compare                                            value_compare;
         typedef ft::RB_Tree<T>                                          tree_type;
-        typedef ft::BD_Iterator<T*>                                     iterator;
-        typedef ft::BD_Iterator<const T*>                               const_iterator;
+        typedef ft::BD_Iterator<T>*                                     iterator;
+        typedef ft::BD_Iterator<const T>*                               const_iterator;
         typedef ft::RE_Iterator<iterator>			                    reverse_iterator;
         typedef	ft::RE_Iterator<const_iterator>	                        const_reverse_iterator;
-        typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
-        typedef difference_type                                         size_type;
+
+        typedef std::size_t										        size_type;
+        typedef std::ptrdiff_t										    difference_type;
+
+//        typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
+//        typedef difference_type                                         size_type;
+
     private:
         allocator_type  _alloc;
         tree_type       _tree;
@@ -62,22 +66,24 @@ namespace ft {
         map& operator= (const map& x) {}
 
         /// Iterators
-//        iterator begin() { return _tree.begin(); }
-//        const_iterator begin() const { return _tree.begin(); }
-//        iterator end() { return _tree.end(); }
-//        const_iterator end() const { return _tree.end(); }
-//        reverse_iterator rbegin() { return _tree.rbegin(); }
-//        const_reverse_iterator rbegin() const { return _tree.rbegin(); }
-//        reverse_iterator rend() { return _tree.rend(); }
-//        const_reverse_iterator rend() const { return _tree.rend(); }
+        iterator begin() { return iterator(_tree.begin()); }
+        const_iterator begin() const { return iterator (_tree.begin()); }
+        iterator end() { return iterator(_tree.end()); }
+        const_iterator end() const { return const_iterator(_tree.end()); }
+        reverse_iterator rbegin() { return reverse_iterator(_tree.end()); }
+        const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree.end()); }
+        reverse_iterator rend() { return reverse_iterator(_tree.begin()); }
+        const_reverse_iterator rend() const { return const_reverse_iterator(_tree.begin()); }
 
         /// Capacity
-        bool empty() const {}
-        size_type size() const {}
-        size_type max_size() const {}
+        bool empty() const { return _tree.tree_size == 0; }
+        size_type size() const { return _tree.tree_size; }
+        size_type max_size() const { return _alloc.max_size(); }
 
         /// Element access
-        mapped_type& operator[] (const key_type& k) {}
+        mapped_type& operator[] (const key_type& k) {
+
+        }
 
         /// Modifiers
         // insert - single element

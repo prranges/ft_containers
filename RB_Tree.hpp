@@ -3,30 +3,82 @@
 namespace ft {
     enum RBTColor { Black, Red };
 
-    template<class Т>
+    template<class value_type>
     struct Node {
         RBTColor color;
-        struct Node *begin;
-        struct Node *left;
-        struct Node *right;
-        struct Node *parent;
+        Node *begin;
+        Node *left;
+        Node *right;
+        Node *parent;
         bool NIL;
-        Т *pair;
+        value_type *pair;
 
-        Node() : pair(new Т()), color(Black), begin(NULL), left(this), right(this), parent(0), NIL(1) {}
-        explicit Node(const Т& p) : pair(new Т(p)), color(Black), begin(NULL), left(this), right(this), parent(0), NIL(0) {}
-        ~Node() { delete pair; }
+        Node() : pair(new value_type()), color(Black), begin(NULL), left(this), right(this), parent(0), NIL(1) {}
+        explicit Node(const value_type& p) : pair(new value_type(p)), color(Black), begin(NULL), left(this), right(this), parent(0), NIL(0) {}
+        ~Node() {}
     };
 
-    template<class T>
+    template <class Key, class Value>
+    struct pair {
+        typedef Key		first_type;
+        typedef Value	second_type;
+        first_type		first;
+        second_type		second;
+
+        pair() : first(first_type()), second(second_type()) {}
+        pair(const first_type& a, const second_type& b) : first(a), second(b) {}
+
+        template<class K, class V>
+        pair(const pair<K, V> &other) : first(static_cast<Key>(other.first)), second(static_cast<Value>(other.second)) {}
+
+        pair &operator= (const pair &other) {
+            first = other.first;
+            second = other.second;
+            return *this;
+        }
+    };
+
+    template <class T1, class T2>
+    bool operator==(const pair <T1, T2>& lhs, const pair <T1, T2>& rhs) {
+        return lhs.first == rhs.first && lhs.second == rhs.second;
+    }
+
+    template <class T1, class T2>
+    bool operator!=(const pair <T1, T2>& lhs, const pair <T1, T2>& rhs) {
+        return !(lhs == rhs);
+    }
+
+    template <class T1, class T2>
+    bool operator<(const pair <T1, T2>& lhs, const pair <T1, T2>& rhs) {
+        return lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second);
+    }
+
+    template <class T1, class T2>
+    bool operator<=(const pair <T1, T2>& lhs, const pair <T1, T2>& rhs) {
+        return !(rhs < lhs);
+    }
+
+    template <class T1, class T2>
+    bool operator>(const pair<T1, T2>& lhs, const pair <T1, T2>& rhs) {
+        return rhs < lhs;
+    }
+
+    template <class T1, class T2>
+    bool operator>=(const pair <T1, T2>& lhs, const pair <T1, T2>& rhs) {
+        return !(lhs < rhs);
+    }
+
+    template <class T1, class T2>
+    pair<T1, T2> make_pair(T1 x, T2 y) {
+        return ft::pair<T1, T2>(x, y);
+    }
+
+    template<class value_type>
     class RB_Tree {
-    private:
-        Node<T> nil;
-        Node<T>* root;
-        size_t tree_size;
     public:
-        typedef typename T::first_type  key_type;
-        typedef typename T::second_type mapped_type;
+        Node<value_type> nil;
+        Node<value_type>* root;
+        size_t tree_size;
 
         RB_Tree() : tree_size(0) {
             root = &nil;
@@ -38,7 +90,7 @@ namespace ft {
             nil.begin = &nil;
         }
 
-        RB_Tree(RB_Tree<T>& other) : tree_size(0) {
+        RB_Tree(RB_Tree<value_type>& other) : tree_size(0) {
             root = &nil;
             nil.color = Black;
             nil.NIL = (&other == &other);
@@ -48,7 +100,7 @@ namespace ft {
             nil.begin = &nil;
         }
 
-        RB_Tree& operator= (const RB_Tree<T>& other) {
+        RB_Tree& operator= (const RB_Tree<value_type>& other) {
             if (this != &other) {
                 root = other.root;
                 nil = other.nil;
@@ -57,8 +109,8 @@ namespace ft {
             return *this;
         }
 
-        void rotateLeft(Node<T> *x) {
-            Node<T> *y = x->right;
+        void rotateLeft(Node<value_type>* x) {
+            Node<value_type> *y = x->right;
 
             x->right = y->left;
             if (!y->left->NIL)  y->left->parent = x;
@@ -77,8 +129,8 @@ namespace ft {
             if (!x->NIL) x->parent = y;
         }
 
-        void rotateRight(Node<T> *x) {
-            Node<T> *y = x->left;
+        void rotateRight(Node<value_type> *x) {
+            Node<value_type> *y = x->left;
 
             x->left = y->right;
             if (!y->right->NIL) y->right->parent = x;
@@ -95,10 +147,10 @@ namespace ft {
             if (!x->NIL) x->parent = y;
         }
 
-        void insertFixup(Node<T> *x) {
+        void insertFixup(Node<value_type>* x) {
             while (x != root && x->parent->color == Red) {
                 if (x->parent == x->parent->parent->left) {
-                    Node<T> *y = x->parent->parent->right;
+                    Node<value_type> *y = x->parent->parent->right;
                     if (y->color == Red) {
                         x->parent->color = Black;
                         y->color = Black;
@@ -114,7 +166,7 @@ namespace ft {
                         rotateRight(x->parent->parent);
                     }
                 } else {
-                    Node<T> *y = x->parent->parent->left;
+                    Node<value_type> *y = x->parent->parent->left;
                     if (y->color == Red) {
                         x->parent->color = Black;
                         y->color = Black;
@@ -134,10 +186,10 @@ namespace ft {
             root->color = Black;
         }
 
-        void deleteFixup(Node<T> *x) {
+        void deleteFixup(Node<value_type>* x) {
             while (x != root && x->color == Black) {
                 if (x == x->parent->left) {
-                    Node<T> *w = x->parent->right;
+                    Node<value_type> *w = x->parent->right;
                     if (w->color == Red) {
                         w->color = Black;
                         x->parent->color = Red;
@@ -161,7 +213,7 @@ namespace ft {
                         x = root;
                     }
                 } else {
-                    Node<T> *w = x->parent->left;
+                    Node<value_type> *w = x->parent->left;
                     if (w->color == Red) {
                         w->color = Black;
                         x->parent->color = Red;
@@ -189,8 +241,8 @@ namespace ft {
             x->color = Black;
         }
 
-        int deleteNode(Node<T> *z) {
-            Node<T> *x, *y;
+        int deleteNode(Node<value_type>* z) {
+            Node<value_type> *x, *y;
 
             if (!z || z->NIL)
                 return 0;
@@ -215,36 +267,36 @@ namespace ft {
                 root = x;
             if (y != z) {
                 delete z->pair;
-                T *p = new T(*y->pair);
+                value_type *p = new value_type(*y->pair);
                 z->pair = p;
             }
             if (y->color == Black)
                 deleteFixup (x);
-            nil.parent = getLast();
-            nil.begin = getBegin();
-            tree_size--;
+            nil.parent = last();
+            nil.begin = begin();
+            --tree_size;
             delete y;
             return 1;
         }
 
-        Node<T>* getBegin() {
-            Node<T>* tmp = root;
+        Node<value_type>* begin() {
+            Node<value_type>* tmp = root;
             while (!tmp->left->NIL) {
                 tmp = tmp->left;
             }
             return tmp;
         }
 
-        Node<T>* getLast() {
-            Node<T>* tmp = root;
+        Node<value_type>* last() {
+            Node<value_type>* tmp = root;
             while (!tmp->right->NIL) {
                 tmp = tmp->right;
             }
             return tmp;
         }
 
-        Node<T>* getEnd() {
-            Node<T>* tmp = root;
+        Node<value_type>* end() {
+            Node<value_type>* tmp = root;
             while (!tmp->right->NIL) {
                 tmp = tmp->right;
             }
