@@ -4,6 +4,7 @@
 #include "Map.hpp"
 
 #include "RB_Tree.hpp"
+#include "Pair.hpp"
 
 #include <vector>
 #include <list>
@@ -14,23 +15,57 @@ int main() {
 
     /// FT
 
-    ft::pair<int, int> q = ft::make_pair(111,222);
-    ft::pair<int, int> w = ft::make_pair(222,111);
-    std::cout << q.first << " : " << q.second << std::endl;
-    std::cout << w.first << " : " << w.second << std::endl;
-
-
-    ft::Node<ft::pair<int, int> > node;
-    node.pair = &q;
-    std::cout << node.pair->first << " : " << node.pair->second << std::endl;
-    std::cout << node.left << " : " << node.right << std::endl;
-
-    ft::map<int, int> s;
-    s.insert(node);
+//    ft::pair<int, int> q = ft::make_pair(111,222);
+//    ft::pair<int, int> w = ft::make_pair(222,111);
+//    std::cout << q.first << " : " << q.second << std::endl;
+//    std::cout << w.first << " : " << w.second << std::endl;
+//
+//
+//    ft::node<ft::pair<int, int> > node;
+//    node.pair = &q;
+//    std::cout << node.pair->first << " : " << node.pair->second << std::endl;
+//    std::cout << node.left << " : " << node.right << std::endl;
+//
 //    ft::RB_Tree<ft::pair<int, int> > rbt;
-//    rbt.insertFixup(node);
-//    std::cout << "hello" << std::endl;
+//
+//    ft::map<int, int> map;
 
+//    map.insert(ft::make_pair(2, 2));
+
+
+    ft::RB_Tree<ft::pair<int, int> > tree;
+
+    tree.insert_node(ft::make_pair(11,6), 0);
+    tree.insert_node(ft::make_pair(2,5), 0);
+    tree.insert_node(ft::make_pair(13,4), 0);
+    tree.insert_node(ft::make_pair(4,3), 0);
+    tree.insert_node(ft::make_pair(15,2), 0);
+    tree.insert_node(ft::make_pair(6,6), 0);
+    tree.insert_node(ft::make_pair(17,7), 0);
+    tree.insert_node(ft::make_pair(8,8), 0);
+    tree.insert_node(ft::make_pair(19,9), 0);
+    tree.insert_node(ft::make_pair(10,10), 0);
+    tree.insert_node(ft::make_pair(1,10), 0);
+//    tree.insert_node(ft::make_pair(18,10), 0);
+    tree.insert_node(ft::make_pair(0,10), 0);
+    tree.insert_node(ft::make_pair(14,14), 0);
+    tree.insert_node(ft::make_pair(12,14), 0);
+    tree.insert_node(ft::make_pair(20,14), 0);
+    tree.insert_node(ft::make_pair(25,14), 0);
+    tree.insert_node(ft::make_pair(28,14), 0);
+    tree.insert_node(ft::make_pair(32,14), 0);
+    tree.insert_node(ft::make_pair(35,14), 0);
+    tree.insert_node(ft::make_pair(38,14), 0);
+    tree.insert_node(ft::make_pair(40,14), 0);
+    tree.insert_node(ft::make_pair(42,14), 0);
+    tree.insert_node(ft::make_pair(33,14), 0);
+    tree.insert_node(ft::make_pair(43,14), 0);
+    
+    tree.printTree();
+
+
+
+//
 
 //    rbt.insertFixup(ft::make_pair(222,111);;
 //    rbt.insertFixup(ft::make_pair(333,333));
