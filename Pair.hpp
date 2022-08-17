@@ -15,7 +15,7 @@ namespace ft {
         pair(const first_type& a, const second_type& b) : first(a), second(b) {}
 
         template<class K, class V>
-        explicit pair(const pair<K, V>& other) : first(other.first), second(other.second) {}
+        pair(const pair<K, V>& other) : first(other.first), second(other.second) {}
 
         /// Destructor
         ~pair() {};

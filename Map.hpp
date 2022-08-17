@@ -16,11 +16,16 @@ namespace ft {
         typedef pair<const Key, Value>                  value_type;
         typedef Compare                                 key_compare;
         typedef Alloc                                   allocator_type;
-        typedef BD_Iterator<node<value_type> >          iterator;
-        typedef BD_Iterator<const node<value_type> >    const_iterator;
+        typedef typename Alloc::reference               reference;
+        typedef typename Alloc::const_reference         const_reference;
+        typedef typename Alloc::size_type               size_type;
+        typedef typename Alloc::difference_type         difference_type;
+        typedef typename Alloc::pointer                 pointer;
+        typedef typename Alloc::const_pointer           const_pointer;
+        typedef BD_Iterator<node<value_type>* >          iterator; ///? *
+        typedef BD_Iterator<const node<value_type>* >    const_iterator; ///? *
         typedef RE_Iterator<iterator>			        reverse_iterator;
         typedef	RE_Iterator<const_iterator>	            const_reverse_iterator;
-        typedef size_t                                  size_type;
     private:
         class pair_compare {
         private:
@@ -65,7 +70,7 @@ namespace ft {
         /// Operator=
         map& operator= (const map& other) {
             if (this != &other) {
-                clear();
+                _tree->clear();
                 _compare = other._compare;
                 _alloc = other._alloc;
                 insert(other.begin(), other.end());
@@ -95,14 +100,32 @@ namespace ft {
 
         /// Modifiers
         // insert - single element
-        pair<iterator, bool> insert (const value_type& val) {
-           
+        pair<iterator, bool> insert (const value_type& n) {
+           node<value_type>* tmp = _tree->search(n.first);
+
+           bool search_result = 0;
+           if (tmp->NIL) {
+               _tree->insert_node(n, 0);
+               tmp = _tree->search(n.first);
+               search_result = 1;
+           }
+            return pair<iterator, bool>(iterator(tmp), search_result);
         }
 //        // insert - with hint
-//        iterator insert (iterator position, const value_type& val) {}
+//        iterator insert (iterator position, const value_type& n) {
+//            node<value_type>* tmp = _tree->search(n->first);
+//
+//            key_type p = n.first;
+//            if (tmp->NIL)
+//                _tree->insert_node(position.base(), n);
+//            return iterator(_tree->search(p));
+//        }
 //        // insert - range
 //        template <class InputIterator>
-//        void insert (InputIterator first, InputIterator last) {}
+//        void insert (InputIterator first, InputIterator last) {
+//            for (; first != last; ++first)
+//                insert(make_pair(first->first, first->second));
+//        }
 
 
         // erase (1)
@@ -130,8 +153,8 @@ namespace ft {
         const_iterator lower_bound (const key_type& k) const {}
         iterator upper_bound (const key_type& k) {}
         const_iterator upper_bound (const key_type& k) const {}
-        std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const {}
-        std::pair<iterator,iterator>             equal_range (const key_type& k) {}
+        pair<const_iterator,const_iterator> equal_range (const key_type& k) const {}
+        pair<iterator,iterator>             equal_range (const key_type& k) {}
 
         /// Allocator
         allocator_type get_allocator() const {}

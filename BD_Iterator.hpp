@@ -56,10 +56,8 @@ namespace ft {
         typedef typename iterator_traits<T>::difference_type    difference_type;
         typedef typename iterator_traits<T>::value_type         value_type;
         typedef typename iterator_traits<T>::pointer            pointer;
-        typedef typename iterator_traits<T>::const_pointer		const_pointer;
         typedef typename iterator_traits<T>::reference          reference;
-        typedef typename iterator_traits<T>::const_reference	const_reference;
-        typedef typename iterator_traits<T>::iterator_category  iterator_category;
+        typedef typename std::bidirectional_iterator_tag        iterator_category;
 
         /// CONSTRUCTORS
         BD_Iterator() : _node() {}
@@ -104,11 +102,11 @@ namespace ft {
         }
 
         reference operator* () const {
-            return *_node->pair;
+            return *_node->key_value;
         }
 
         pointer operator-> () const {
-            return _node->pair;
+            return _node->key_value;
         }
 
         iterator_type base() const { return _node; }
