@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Pair.hpp"
+#include "BD_Iterator.hpp"
 
 namespace ft {
     enum node_color { Black, Red };
 
     template<class value_type>
     struct node {
-        value_type*  key_value;
+        value_type* key_value; // pair
         node_color  color;
 
         node*       left;
@@ -264,6 +265,7 @@ namespace ft {
 
         node<value_type>* begin() {
             node<value_type>* tmp = root;
+
             while (!tmp->left->NIL) {
                 tmp = tmp->left;
             }
@@ -272,6 +274,7 @@ namespace ft {
 
         node<value_type>* last() {
             node<value_type>* tmp = root;
+
             while (!tmp->right->NIL) {
                 tmp = tmp->right;
             }

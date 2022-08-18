@@ -3,8 +3,7 @@
 #include "Iterator_traits.hpp"
 
 namespace ft {
-    template <class T>
-    class BD_Iterator {
+    template<class T, class Pair> class BD_Iterator {
     private:
         T _node;
 
@@ -21,8 +20,8 @@ namespace ft {
         }
 
         void next() {
-            if (_node->NIL && _node->begin != _node) _node = _node->begin;
-            else if (!_node->right->NIL) {
+//            if (_node->NIL && _node->begin != _node) _node = _node->begin;
+            if (!_node->right->NIL) {
                 _node = min_node(_node->right);
             } else {
                 T current = _node;
@@ -53,30 +52,56 @@ namespace ft {
         }
     public:
         typedef T                                               iterator_type;
-        typedef typename iterator_traits<T>::difference_type    difference_type;
-        typedef typename iterator_traits<T>::value_type         value_type;
-        typedef typename iterator_traits<T>::pointer            pointer;
-        typedef typename iterator_traits<T>::reference          reference;
-        typedef typename std::bidirectional_iterator_tag        iterator_category;
+
+        typedef typename iterator_traits<T*>::difference_type    difference_type;
+        typedef typename iterator_traits<T*>::value_type         value_type;
+//        typedef typename iterator_traits<T*>::pointer            pointer;
+//        typedef typename iterator_traits<T*>::reference          reference;
+        typedef typename iterator_traits<T>::iterator_category  iterator_category;
+        typedef Pair &reference;
+        typedef const Pair &const_reference;
+        typedef Pair*                                           pointer;
+        typedef const Pair*                                     const_pointer;
 
         /// CONSTRUCTORS
-        BD_Iterator() : _node() {}
-        explicit BD_Iterator(T node) : _node(node) {}
-        BD_Iterator(const BD_Iterator& other) : _node(other._node) {}
+//        BD_Iterator(T node): _node(node) {}
+//        BD_Iterator(const BD_Iterator& other) : _node(other.base()) {}
+
+
+        BD_Iterator(T value = nullptr) : _node(value) {};
+
+        template<class U, class Z>
+        BD_Iterator(const BD_Iterator<U, Z> &other, typename ft::enable_if<std::is_convertible<U, T>::value>::type * = 0) : _node(other.base()) {};
+
+
+//        BD_Iterator() : _node() {}
+//        BD_Iterator(T node) : _node(node) {}
+//        BD_Iterator(const BD_Iterator& other) : _node(other._node) {}
 
         /// DESTRUCTOR
         ~BD_Iterator() {}
 
         /// OPERATORS
-        template <class Type>
-        operator BD_Iterator<Type>() const {
-            return RA_Iterator<Type>(_node);
+//        template <class Type>
+//        operator BD_Iterator<Type>() const {
+//            return BD_Iterator<Type>(_node);
+//        }
+
+//        BD_Iterator& operator= (BD_Iterator<Iterator> const & other) {
+//            _node = & (*other._node);
+//            return *this;
+//        }
+        BD_Iterator &operator= (BD_Iterator const & other) {
+            _node = other.node;
+            return *this;
         }
 
-        template <class Iterator>
-        BD_Iterator& operator= (BD_Iterator<Iterator> const & other) {
-            _node = & (*other._node);
-            return *this;
+        reference operator* () const {
+            return *_node->key_value;
+        }
+
+        pointer operator-> () const {
+            return _node->key_value;
         }
 
         BD_Iterator& operator++ () {
@@ -101,24 +126,27 @@ namespace ft {
             return tmp;
         }
 
-        reference operator* () const {
-            return *_node->key_value;
+        T base() const {
+            return _node;
         }
 
-        pointer operator-> () const {
-            return _node->key_value;
-        }
+        bool operator== (BD_Iterator const &obj) const {
+            return _node == obj._node;
+        };
 
-        iterator_type base() const { return _node; }
+        bool operator!= (BD_Iterator const &obj) const {
+            return _node != obj._node;
+        };
+
     };
 
-    template <class Iterator1, class Iterator2>
-    bool operator== (const BD_Iterator<Iterator1>& a, const BD_Iterator<Iterator2>& b) {
-        return a.base() == b.base();
-    }
-
-    template <class Iterator1, class Iterator2>
-    bool operator!= (const BD_Iterator<Iterator1>& a, const BD_Iterator<Iterator2>& b) {
-        return !(a.base() == b.base());
-    }
+//    template <class Iterator1, class Iterator2>
+//    bool	operator== (const BD_Iterator<Iterator1>& a, const BD_Iterator<Iterator2>& b) {
+//        return a.base() == b.base();
+//    }
+//
+//    template <class Iterator1, class Iterator2>
+//    bool	operator!=(const BD_Iterator<Iterator1>& a, const BD_Iterator<Iterator2>& b) {
+//        return !(a.base() == b.base());
+//    }
 }

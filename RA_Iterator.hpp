@@ -14,7 +14,7 @@ namespace ft {
         typedef typename iterator_traits<T>::iterator_category  iterator_category;
 
         /// CONSTRUCTORS
-        RA_Iterator() : _val(nullptr) {}
+        RA_Iterator() : _val() {}
         explicit RA_Iterator(T val) : _val(val) {}
         RA_Iterator(const RA_Iterator& other) : _val(other._val) {}
 
