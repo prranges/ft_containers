@@ -10,7 +10,6 @@ namespace ft {
     struct node {
         value_type* key_value; // pair
         node_color  color;
-
         node*       left;
         node*       right;
         node*       parent;
@@ -29,13 +28,13 @@ namespace ft {
     private:
         node<value_type> nil;
         node<value_type>* root;
-        size_t tree_size;
+        size_t _size;
     public:
         typedef typename value_type::first_type	    key_type;
         typedef typename value_type::second_type    mapped_type;
 
         /// Constructors
-        RB_Tree() : tree_size(0) {
+        RB_Tree() : _size(0) {
             root = &nil;
             nil.color = Black;
             nil.NIL = true;
@@ -44,7 +43,7 @@ namespace ft {
             nil.right = &nil;
         }
 
-        RB_Tree(RB_Tree<value_type>& other) : tree_size(0) {
+        RB_Tree(RB_Tree<value_type>& other) : _size(0) {
             root = &nil;
             nil.color = Black;
             nil.NIL = (&other == &other);
@@ -57,17 +56,26 @@ namespace ft {
             if (this != &other) {
                 root = other.root;
                 nil = other.nil;
-                tree_size = other.tree_size;
+                _size = other._size;
             }
             return *this;
         }
 
-        void clear (node<value_type>* n) {
-            if (n->NIL) return;
-            if (!n->left->NIL) clear(n->left);
-            if (!n->right->NIL) clear(n->right);
-            delete n;
+        void clear_node(node<value_type> *n) {
+            if (!n->NIL){
+                clear_node(n->right);
+                clear_node(n->left);
+                delete n;
+            }
         }
+
+        void clear () {
+            clear_node(root);
+            root = &nil;
+            nil.parent = NULL;
+            _size = 0;
+        }
+
 
         void left_rotate(node<value_type>* x) {
             node<value_type>* y = x->right;
@@ -127,7 +135,7 @@ namespace ft {
             n->left = &nil;
             n->right = &nil;
             n->color = Red;
-            tree_size++;
+            ++_size;
             insert_fixup(n);
         }
 
@@ -203,7 +211,7 @@ namespace ft {
             if (y->color == 0) {
                 delete_fixup (x);
             }
-            --tree_size;
+            --_size;
             delete y;
             return 1;
         }
@@ -299,6 +307,10 @@ namespace ft {
                     node = node->right;
             }
             return node;
+        }
+
+        size_t size() const {
+            return _size;
         }
 
 

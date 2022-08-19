@@ -21,8 +21,8 @@ namespace ft {
         typedef typename allocator_type::pointer                    pointer;
         typedef typename allocator_type::const_pointer              const_pointer;
         typedef typename Alloc::size_type                           size_type;
-        typedef BD_Iterator<node<value_type>*, value_type>			iterator; ///
-        typedef BD_Iterator<const node<value_type>*, value_type>	const_iterator; ///
+        typedef BD_Iterator<node<value_type>*, value_type>			iterator;
+        typedef BD_Iterator<const node<value_type>*, value_type>	const_iterator;
         typedef RE_Iterator<iterator>			                    reverse_iterator;
         typedef	RE_Iterator<const_iterator>	                        const_reverse_iterator;
     private:
@@ -56,19 +56,33 @@ namespace ft {
             _tree = _tree_alloc.allocate(sizeof(tree_type));
             _tree_alloc.construct(_tree);
         }
+
         // range
-        template <class InputIterator>
-        map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
-        _alloc(alloc), _tree(first, last, comp, _alloc), _compare(comp) {}
+        template <class Iterator>
+        map (Iterator first, Iterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
+            _alloc(alloc), _compare(comp) {
+            _tree = _tree_alloc.allocate(sizeof(tree_type));
+            _tree_alloc.construct(_tree);
+            for (; first != last; ++first)
+                insert(*first);
+        }
+
         // copy
-        map (const map& other) : _alloc(other._alloc), _compare(other._compare) {}
+        map (map& other) : _alloc(other._alloc), _compare(other._compare) { /// const map& other
+            _tree = _tree_alloc.allocate(sizeof(tree_type));
+            _tree_alloc.construct(_tree, *(other._tree));
+            iterator first = other.begin();
+            iterator last = other.end();
+            for (; first != last; ++first)
+                insert(*first);
+        }
 
         /// Destructor
         ~map() {}
 
         /// Operator=
         map& operator= (const map& other) {
-            if (this != &other) {
+            if (this != & other) {
                 _tree->clear();
                 _compare = other._compare;
                 _alloc = other._alloc;
@@ -88,8 +102,8 @@ namespace ft {
         const_reverse_iterator rend() const { return const_reverse_iterator(_tree->begin()); }
 
         /// Capacity
-        bool empty() const { return _tree->tree_size == 0; }
-        size_type size() const { return _tree->tree_size; }
+        bool empty() const { return _tree->_size() == 0; }
+        size_type size() const { return _tree->size(); }
         size_type max_size() const { return _alloc->max_size(); }
 
         /// Element access
@@ -115,6 +129,7 @@ namespace ft {
            }
             return pair<iterator, bool>(iterator(tmp), search_result);
         }
+
         // insert - with hint
         iterator insert (iterator position, const value_type& n) {
             node<value_type>* tmp = _tree->search(n->first);
@@ -124,6 +139,7 @@ namespace ft {
                 _tree->insert_node(position.base(), n);
             return iterator(_tree->search(p));
         }
+
         // insert - range
         template <class InputIterator>
         void insert (InputIterator first, InputIterator last) {
@@ -143,7 +159,9 @@ namespace ft {
         void swap (map& x) {}
 
         // clear
-        void clear() {}
+        void clear() {
+            _tree->clear();
+        }
 
         /// Observers
         key_compare key_comp() const {}

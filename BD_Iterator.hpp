@@ -50,49 +50,27 @@ namespace ft {
                 }
             }
         }
-    public:
-        typedef T                                               iterator_type;
 
-        typedef typename iterator_traits<T*>::difference_type    difference_type;
-        typedef typename iterator_traits<T*>::value_type         value_type;
-//        typedef typename iterator_traits<T*>::pointer            pointer;
-//        typedef typename iterator_traits<T*>::reference          reference;
-        typedef typename iterator_traits<T>::iterator_category  iterator_category;
-        typedef Pair &reference;
-        typedef const Pair &const_reference;
+    public:
+        typedef typename iterator_traits<T*>::difference_type   difference_type;
+        typedef typename iterator_traits<T*>::value_type        value_type;
         typedef Pair*                                           pointer;
         typedef const Pair*                                     const_pointer;
+        typedef Pair&                                           reference;
+        typedef const Pair&                                     const_reference;
+        typedef typename iterator_traits<T>::iterator_category  iterator_category;
 
         /// CONSTRUCTORS
-//        BD_Iterator(T node): _node(node) {}
-//        BD_Iterator(const BD_Iterator& other) : _node(other.base()) {}
-
-
-        BD_Iterator(T value = nullptr) : _node(value) {};
-
-        template<class U, class Z>
-        BD_Iterator(const BD_Iterator<U, Z> &other, typename ft::enable_if<std::is_convertible<U, T>::value>::type * = 0) : _node(other.base()) {};
-
-
-//        BD_Iterator() : _node() {}
-//        BD_Iterator(T node) : _node(node) {}
-//        BD_Iterator(const BD_Iterator& other) : _node(other._node) {}
+        BD_Iterator() : _node() {}
+        BD_Iterator(T node) : _node(node) {}
+        BD_Iterator(const BD_Iterator& other) : _node(other._node) {}
 
         /// DESTRUCTOR
         ~BD_Iterator() {}
 
         /// OPERATORS
-//        template <class Type>
-//        operator BD_Iterator<Type>() const {
-//            return BD_Iterator<Type>(_node);
-//        }
-
-//        BD_Iterator& operator= (BD_Iterator<Iterator> const & other) {
-//            _node = & (*other._node);
-//            return *this;
-//        }
-        BD_Iterator &operator= (BD_Iterator const & other) {
-            _node = other.node;
+        BD_Iterator& operator= (BD_Iterator const & other) {
+            _node = &(*other._node);
             return *this;
         }
 
@@ -130,12 +108,12 @@ namespace ft {
             return _node;
         }
 
-        bool operator== (BD_Iterator const &obj) const {
-            return _node == obj._node;
+        bool operator== (BD_Iterator const & other) const {
+            return _node == other._node;
         };
 
-        bool operator!= (BD_Iterator const &obj) const {
-            return _node != obj._node;
+        bool operator!= (BD_Iterator const & other) const {
+            return _node != other._node;
         };
 
     };

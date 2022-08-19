@@ -19,35 +19,44 @@ int main() {
 //    std::cout << node.left << " : " << node.right << std::endl;
 
     /// FT_MAP
-    ft::map<int, int> ft_map;
-    ft_map.insert(ft::make_pair(5, 5000));
-    ft_map.insert(ft::make_pair(1, 1000));
-    ft_map.insert(ft::make_pair(3, 3000));
+    ft::map<int, int> ft_map1;
+    ft_map1.insert(ft::make_pair(5, 5000));
+    ft_map1.insert(ft::make_pair(1, 1000));
+    ft_map1.insert(ft::make_pair(3, 3000));
 
-    std::cout << ft_map[1] << std::endl;
-    std::cout << ft_map[5] << std::endl;
-    std::cout << ft_map[3] << std::endl;
+    ft::map<int, int> ft_map2(ft_map1);
+    ft::map<int, int> ft_map(ft_map2.begin(), ft_map2.end());
 
-    ft::map<int, int>::iterator x = ft_map.begin();
+    ft_map[1] = 1234;
+    std::cout << "[1] - " << ft_map[1] << std::endl;
+    std::cout << "[5] - " << ft_map[5] << std::endl;
+    std::cout << "[3] - " << ft_map[3] << std::endl;
+
+    ft::map<int, int>::iterator xx = ft_map.begin();
+    ft::map<int, int>::iterator x;
+    x = xx;
 
     for (; x != ft_map.end(); ++x)
         std::cout << x->first << " : " << x->second << std::endl;
 
-    std::cout << ft_map.find(1)->first << std::endl;
-    std::cout << ft_map.begin()->first << std::endl;
+    std::cout << "ft_find - " << ft_map.find(1)->first << std::endl;
+    std::cout << "ft_begin - "  << ft_map.begin()->first << std::endl;
 
     /// STD_MAP
-    std::map<int, int> std_map;
-    std_map.insert(std::make_pair(5, 5));
-    std_map.insert(std::make_pair(1, 1));
-    std_map.insert(std::make_pair(3, 3));
-
-    std::map<int, int>::iterator y = std_map.begin();
-    for (; y != std_map.end(); ++y)
-        std::cout << y->first << " : " << y->second << std::endl;
-
-    std::cout << "find - " << std_map.find(1)->first << std::endl;
-    std::cout << "begin - " << std_map.begin()->first << std::endl;
+//    std::map<int, int> std_map1;
+//    std::map<int, int> std_map2(std_map1);
+//    std::map<int, int> std_map(std_map2.begin(), std_map2.end());
+//
+//    std_map.insert(std::make_pair(5, 5));
+//    std_map.insert(std::make_pair(1, 1));
+//    std_map.insert(std::make_pair(3, 3));
+//
+//    std::map<int, int>::iterator y = std_map.begin();
+//    for (; y != std_map.end(); ++y)
+//        std::cout << y->first << " : " << y->second << std::endl;
+//
+//    std::cout << "std_find - " << std_map.find(1)->first << std::endl;
+//    std::cout << "std_begin - " << std_map.begin()->first << std::endl;
     /// MAP
 
 //    /// TREE
