@@ -368,6 +368,7 @@ namespace ft {
         return !(lhs < rhs);
     }
 } // ft
+
 namespace std{
     /// SWAP
     template< class T, class Alloc >

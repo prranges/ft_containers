@@ -23,24 +23,45 @@ int main() {
     ft_map1.insert(ft::make_pair(5, 5000));
     ft_map1.insert(ft::make_pair(1, 1000));
     ft_map1.insert(ft::make_pair(3, 3000));
+//    ft_map1.insert(ft::make_pair(2, 2000));
+//    ft_map1.insert(ft::make_pair(4, 4000));
 
     ft::map<int, int> ft_map2(ft_map1);
     ft::map<int, int> ft_map(ft_map2.begin(), ft_map2.end());
 
-    ft_map[1] = 1234;
-    std::cout << "[1] - " << ft_map[1] << std::endl;
-    std::cout << "[5] - " << ft_map[5] << std::endl;
-    std::cout << "[3] - " << ft_map[3] << std::endl;
+//    ft_map[1] = 1234;
+//    std::cout << "[1] - " << ft_map[1] << std::endl;
+//    std::cout << "[5] - " << ft_map[5] << std::endl;
+//    std::cout << "[3] - " << ft_map[3] << std::endl;
+//    std::cout << std::endl;
+
 
     ft::map<int, int>::iterator xx = ft_map.begin();
     ft::map<int, int>::iterator x;
     x = xx;
 
-    for (; x != ft_map.end(); ++x)
+    ft::map<int, int>::iterator xxx = ft_map.end();
+//    ft::map<int, int>::iterator xxx = ft_map.begin();
+//    xxx++;
+//    xxx++;
+
+//    if (xxx == ft_map.end())
+//        std::cout << "HELLO END" << std::endl;
+
+    for (; x != xxx; ++x)
         std::cout << x->first << " : " << x->second << std::endl;
 
-    std::cout << "ft_find - " << ft_map.find(1)->first << std::endl;
-    std::cout << "ft_begin - "  << ft_map.begin()->first << std::endl;
+    std::cout << "reverse" << std::endl;
+
+    for (; --xxx != --ft_map.begin(); --xxx)
+        std::cout << xxx->first << " : " << xxx->second << std::endl;
+
+
+
+//    std::cout << "ft_find - " << ft_map.find(1)->first << std::endl;
+//    std::cout << "ft_begin - "  << ft_map.begin()->first << std::endl;
+//
+//    std::cout << std::endl << "tree-size: " << ft_map.size() << std::endl;
 
     /// STD_MAP
 //    std::map<int, int> std_map1;
@@ -59,7 +80,7 @@ int main() {
 //    std::cout << "std_begin - " << std_map.begin()->first << std::endl;
     /// MAP
 
-//    /// TREE
+    /// TREE
 //    ft::RB_Tree<ft::pair<int, int> > tree;
 //    tree.insert_node(ft::make_pair(11,6), 0);
 //    tree.insert_node(ft::make_pair(2,5), 0);
@@ -68,11 +89,15 @@ int main() {
 //    tree.insert_node(ft::make_pair(15,2), 0);
 //
 //    ft::node<ft::pair<int, int> >* s = tree.search(11);
-//    std::cout << s << "\t" <<  s->key_value->first << " : " << s->key_value->second << std::endl;
+////    std::cout << s << "\t" <<  s->key_value->first << " : " << s->key_value->second << std::endl;
+//
 //    tree.printTree();
+//
+//    std::cout << "tree-size: " << tree.size() << std::endl;
 //    tree.delete_node(s);
 //    tree.printTree();
-//    /// TREE
+//    std::cout << "tree-size: " << tree.size() << std::endl;
+    /// TREE
 
 
 

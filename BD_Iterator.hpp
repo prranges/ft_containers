@@ -20,7 +20,8 @@ namespace ft {
         }
 
         void next() {
-//            if (_node->NIL && _node->begin != _node) _node = _node->begin;
+//            if (_node->NIL && _node != _node->begin)
+//                _node = _node->begin;
             if (!_node->right->NIL) {
                 _node = min_node(_node->right);
             } else {
@@ -37,7 +38,8 @@ namespace ft {
         }
 
         void prev() {
-            if (_node->NIL) _node = _node->parent;
+            if (_node->NIL)
+                _node = _node->parent;
             else if (!_node->left->NIL) {
                 _node = max_node(_node->left);
             } else {
@@ -45,7 +47,10 @@ namespace ft {
                 _node = _node->parent;
                 while (_node->right != tmp) {
                     tmp = _node;
-                    if (!_node->parent) { _node = tmp->left - 1; break; }
+                    if (!_node->parent) {
+                        _node = tmp->left - 1;
+                        break;
+                    }
                     _node = _node->parent;
                 }
             }

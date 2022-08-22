@@ -1,11 +1,22 @@
 #pragma once
 
 namespace ft {
+    // Converse const
+    template <class T>
+    struct convert_const {
+        typedef T type;
+    };
+
+    template <class T>
+    struct convert_const<const T> {
+        typedef T type;
+    };
+
     // Enable_if
     template <bool Condition, class T = void>
     struct enable_if {};
 
-    //	Specialisation enable_if for true
+    // Specialisation enable_if for true
     template <class T>
     struct enable_if<true, T> {
         typedef T type;
@@ -17,7 +28,9 @@ namespace ft {
         static const bool value = val;
         typedef T value_type;
         typedef integral_constant type;
-        operator value_type() const { return value; }
+        operator value_type() const {
+            return value;
+        }
     };
 
     template <class T> struct is_integral : public ft::integral_constant<T, false> {};
@@ -45,16 +58,16 @@ namespace ft {
     }
 
     // Lexicographical comparison
-    template <class InputIt1, class InputIt2>
-    bool lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2) {
+    template <class Iterator1, class Iterator2>
+    bool lexicographical_compare(Iterator1 first1, Iterator1 last1, Iterator2 first2, Iterator2 last2) {
         for (; first1 != last1 && first2 != last2; ++first1, ++first2) {
             if (*first1 < *first2) return true;
             if (*first2 < *first1) return false;
         }
         return (first1 == last1) && (first2 != last2);
     }
-    template <class InputIt1, class InputIt2, class Compare>
-    bool lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, Compare comp) {
+    template <class Iterator1, class Iterator2, class Compare>
+    bool lexicographical_compare(Iterator1 first1, Iterator1 last1, Iterator2 first2, Iterator2 last2, Compare comp) {
         for (; first1 != last1 && first2 != last2; ++first1, ++first2) {
             if (comp(*first1 < *first2)) return true;
             if (comp(*first2 < *first1)) return false;
@@ -63,17 +76,18 @@ namespace ft {
     }
 
     // equal
-    template<class InputIterator1, class InputIterator2>
-    bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
+    template<class Iterator1, class Iterator2>
+    bool equal(Iterator1 first1, Iterator1 last1, Iterator2 first2)
     {
         for ( ; first1 != last1; ++first1, ++first2) {
-            if (!(*first1 == *first2)) return false;
+            if (!(*first1 == *first2))
+                return false;
         }
         return true;
     }
 
-    template<class InputIterator1, class InputIterator2, class BinaryPredicate>
-    bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate p)
+    template<class Iterator1, class Iterator2, class BinaryPredicate>
+    bool equal(Iterator1 first1, Iterator1 last1, Iterator2 first2, BinaryPredicate p)
     {
         for (; first1 != last1; ++first1, ++first2) {
             if (!p(*first1, *first2)) {

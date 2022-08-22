@@ -290,7 +290,12 @@ namespace ft {
         }
 
         node<value_type>* end() {
-            return last()->right;
+            node<value_type>* tmp = root;
+
+            while (!tmp->right->NIL) {
+                tmp = tmp->right;
+            }
+            return tmp->right;
         }
 
         node<value_type>* search(key_type key) {
