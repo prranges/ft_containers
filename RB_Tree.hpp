@@ -14,10 +14,11 @@ namespace ft {
         node*       right;
         node*       parent;
         bool        NIL;
+        node*       begin;
 
         /// Constructors
-        node() : key_value(new value_type()), color(Black), left(this), right(this), parent(0), NIL(1) {}
-        explicit node(const value_type& n) : key_value(new value_type(n)), color(Black), left(this), right(this), parent(0), NIL(0) {}
+        node() : key_value(new value_type()), color(Black), left(this), right(this), parent(0), NIL(1), begin(NULL) {}
+        node(const value_type& n) : key_value(new value_type(n)), color(Black), left(this), right(this), parent(0), NIL(0), begin(NULL) {}
 
         /// Destructor
         ~node() {}
@@ -41,6 +42,7 @@ namespace ft {
             nil.parent = 0;
             nil.left = &nil;
             nil.right = &nil;
+            nil.begin = &nil;
         }
 
         RB_Tree(RB_Tree<value_type>& other) : _size(0) {
@@ -50,6 +52,7 @@ namespace ft {
             nil.parent = 0;
             nil.left = &nil;
             nil.right = &nil;
+            nil.begin = &nil;
         }
 
         RB_Tree& operator= (const RB_Tree<value_type>& other) {
@@ -211,6 +214,8 @@ namespace ft {
             if (y->color == 0) {
                 delete_fixup (x);
             }
+            nil.parent = last(); /// added
+            nil.begin = begin(); /// added
             --_size;
             delete y;
             return 1;
@@ -280,6 +285,15 @@ namespace ft {
             return tmp;
         }
 
+        node<value_type>* begin() const {
+            node<value_type>* tmp = root;
+
+            while (!tmp->left->NIL) {
+                tmp = tmp->left;
+            }
+            return tmp;
+        }
+
         node<value_type>* last() {
             node<value_type>* tmp = root;
 
@@ -289,7 +303,25 @@ namespace ft {
             return tmp;
         }
 
+        node<value_type>* last() const {
+            node<value_type>* tmp = root;
+
+            while (!tmp->right->NIL) {
+                tmp = tmp->right;
+            }
+            return tmp;
+        }
+
         node<value_type>* end() {
+            node<value_type>* tmp = root;
+
+            while (!tmp->right->NIL) {
+                tmp = tmp->right;
+            }
+            return tmp->right;
+        }
+
+        node<value_type>* end() const {
             node<value_type>* tmp = root;
 
             while (!tmp->right->NIL) {
@@ -317,8 +349,6 @@ namespace ft {
         size_t size() const {
             return _size;
         }
-
-
 
 
 

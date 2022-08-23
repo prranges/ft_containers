@@ -19,41 +19,74 @@ namespace ft {
             return max_node(node->right);
         }
 
+
         void next() {
-//            if (_node->NIL && _node != _node->begin)
-//                _node = _node->begin;
-            if (!_node->right->NIL) {
-                _node = min_node(_node->right);
-            } else {
-                T current = _node;
-                T tmp = _node;
-                _node = _node->parent;
-                if (!_node) { _node = current->right; return; }
-                while (_node->left != tmp) {
-                    if (!_node->parent) { _node = current->right; break; }
-                    tmp = _node;
-                    _node = _node->parent;
+            if (!_node->NIL) {
+                if (!_node->right->NIL){
+                    _node = _node->right;
+                    while (!_node->left->NIL)
+                        _node = _node->left;
+                }
+                else{
+                    T parent = _node->parent;
+                    while(!parent->NIL && _node == parent->right)
+                    {
+                        _node = parent;
+                        parent = parent->parent;
+                    }
+                    _node = parent;
                 }
             }
+//            if (_node->NIL && _node != _node->begin)
+//                _node = _node->begin;
+//            if (!_node->right->NIL) {
+//                _node = min_node(_node->right);
+//            } else {
+//                T current = _node;
+//                T tmp = _node;
+//                _node = _node->parent;
+//                if (!_node) { _node = current->right; return; }
+//                while (_node->left != tmp) {
+//                    if (!_node->parent) { _node = current->right; break; }
+//                    tmp = _node;
+//                    _node = _node->parent;
+//                }
+//            }
         }
 
         void prev() {
-            if (_node->NIL)
+            if (_node->NIL){
                 _node = _node->parent;
-            else if (!_node->left->NIL) {
+            } else if (!_node->left->NIL) {
                 _node = max_node(_node->left);
             } else {
-                T tmp = _node;
-                _node = _node->parent;
-                while (_node->right != tmp) {
-                    tmp = _node;
-                    if (!_node->parent) {
-                        _node = tmp->left - 1;
-                        break;
-                    }
-                    _node = _node->parent;
+                T parent = _node->parent;
+                while (!parent->NIL && _node == parent->left){
+                    _node = parent;
+                    parent = parent->parent;
                 }
+                if (!parent->NIL)
+                    _node = parent;
             }
+//            if (_node->NIL) {
+//                _node = _node->parent;
+//                std::cout << _node->parent << std::endl;
+//                std::cout << "PIZDEC" << std::endl;
+//            }
+//            else if (!_node->left->NIL) {
+//                _node = max_node(_node->left);
+//            } else {
+//                T tmp = _node;
+//                _node = _node->parent;
+//                while (_node->right != tmp) {
+//                    tmp = _node;
+//                    if (!_node->parent) {
+//                        _node = tmp->left - 1;
+//                        break;
+//                    }
+//                    _node = _node->parent;
+//                }
+//            }
         }
 
     public:

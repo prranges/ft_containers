@@ -6,6 +6,7 @@
 #include "RE_Iterator.hpp"
 #include "Utility.hpp"
 #include "RB_Tree.hpp"
+#include "Pair.hpp"
 
 namespace ft {
     template<class Key, class Value, class Compare = ft::less <Key>, class Alloc = std::allocator <ft::pair<const Key, Value> > >
@@ -13,7 +14,7 @@ namespace ft {
     public:
         typedef Key                                                 key_type;
         typedef Value                                               mapped_type;
-        typedef pair<const Key, Value>                              value_type;
+        typedef ft::pair<const Key, Value>                              value_type;
         typedef Compare                                             key_compare;
         typedef Alloc                                               allocator_type;
         typedef typename allocator_type::reference                  reference;
@@ -102,9 +103,9 @@ namespace ft {
         const_reverse_iterator rend() const { return const_reverse_iterator(_tree->begin()); }
 
         /// Capacity
-        bool empty() const { return _tree->_size() == 0; }
+        bool empty() const { return _tree->size() == 0; }
         size_type size() const { return _tree->size(); }
-        size_type max_size() const { return _alloc->max_size(); }
+        size_type max_size() const { return _node_alloc.max_size(); }
 
         /// Element access
         mapped_type& operator[] (const key_type& k) {
@@ -132,19 +133,18 @@ namespace ft {
 
         // insert - with hint
         iterator insert (iterator position, const value_type& n) {
-            node<value_type>* tmp = _tree->search(n->first);
+            node<value_type>* tmp = _tree->search(n.first);
 
-            key_type p = n.first;
             if (tmp->NIL)
-                _tree->insert_node(position.base(), n);
-            return iterator(_tree->search(p));
+                insert(n);
+            return iterator(_tree->search(n.first));
         }
 
         // insert - range
-        template <class InputIterator>
-        void insert (InputIterator first, InputIterator last) {
+        template <class Iterator>
+        void insert (Iterator first, Iterator last) {
             for (; first != last; ++first)
-                insert(make_pair(first->first, first->second));
+                insert(*first);
         }
 
         // erase (1)

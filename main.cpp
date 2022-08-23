@@ -23,8 +23,6 @@ int main() {
     ft_map1.insert(ft::make_pair(5, 5000));
     ft_map1.insert(ft::make_pair(1, 1000));
     ft_map1.insert(ft::make_pair(3, 3000));
-//    ft_map1.insert(ft::make_pair(2, 2000));
-//    ft_map1.insert(ft::make_pair(4, 4000));
 
     ft::map<int, int> ft_map2(ft_map1);
     ft::map<int, int> ft_map(ft_map2.begin(), ft_map2.end());
@@ -37,27 +35,33 @@ int main() {
 
 
     ft::map<int, int>::iterator xx = ft_map.begin();
-    ft::map<int, int>::iterator x;
-    x = xx;
+    ft::map<int, int>::iterator start;
+    start = xx;
+    ft::map<int, int>::iterator end = ft_map.end();
 
-    ft::map<int, int>::iterator xxx = ft_map.end();
-//    ft::map<int, int>::iterator xxx = ft_map.begin();
-//    xxx++;
-//    xxx++;
+    end++;
+    if (end == NULL)
+        std::cout << "HALLO" << std::endl;
 
-//    if (xxx == ft_map.end())
-//        std::cout << "HELLO END" << std::endl;
+    std::cout << end->first << " : " << end->second << "?!!?" << std::endl;
 
-    for (; x != xxx; ++x)
-        std::cout << x->first << " : " << x->second << std::endl;
+    std::cout << "PRINT MAP" << std::endl;
+    for (; start != end; ++start)
+        std::cout << start->first << " : " << start->second << std::endl;
 
-    std::cout << "reverse" << std::endl;
-
-    for (; --xxx != --ft_map.begin(); --xxx)
-        std::cout << xxx->first << " : " << xxx->second << std::endl;
+//    std::cout << "PRINT MAP reverse" << std::endl;
 
 
 
+//    --end;
+
+    std::cout << end->first << " : " << end->second << std::endl;
+
+//    for (; end != --ft_map.begin(); --end)
+//        std::cout << end->first << " : " << end->second << std::endl;
+
+
+//
 //    std::cout << "ft_find - " << ft_map.find(1)->first << std::endl;
 //    std::cout << "ft_begin - "  << ft_map.begin()->first << std::endl;
 //
@@ -76,6 +80,10 @@ int main() {
 //    for (; y != std_map.end(); ++y)
 //        std::cout << y->first << " : " << y->second << std::endl;
 //
+//    std::map<int, int>::iterator end = --std_map.end();
+//    for (; end != --std_map.begin(); --end)
+//        std::cout << end->first << " : " << end->second << std::endl;
+
 //    std::cout << "std_find - " << std_map.find(1)->first << std::endl;
 //    std::cout << "std_begin - " << std_map.begin()->first << std::endl;
     /// MAP
