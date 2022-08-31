@@ -13,12 +13,12 @@
 
 int main() {
 
-    /// NODE
-//    ft::node<ft::pair<int, int> > node(ft::make_pair(1, 3));
-//    std::cout << node.key_value.first << " : " << node.key_value.second << std::endl;
-//    std::cout << node.left << " : " << node.right << std::endl;
-
-    /// FT_MAP
+//    /// NODE
+////    ft::node<ft::pair<int, int> > node(ft::make_pair(1, 3));
+////    std::cout << node.key_value.first << " : " << node.key_value.second << std::endl;
+////    std::cout << node.left << " : " << node.right << std::endl;
+//
+//    /// FT_MAP
     ft::map<int, int> ft_map1;
     ft_map1.insert(ft::make_pair(5, 5000));
     ft_map1.insert(ft::make_pair(1, 1000));
@@ -34,30 +34,31 @@ int main() {
 //    std::cout << std::endl;
 
 
-    ft::map<int, int>::iterator xx = ft_map.begin();
-    ft::map<int, int>::iterator start;
-    start = xx;
-    ft::map<int, int>::iterator end = ft_map.end();
-
-    end++;
-    if (end == NULL)
-        std::cout << "HALLO" << std::endl;
-
-    std::cout << end->first << " : " << end->second << "?!!?" << std::endl;
-
-    std::cout << "PRINT MAP" << std::endl;
-    for (; start != end; ++start)
-        std::cout << start->first << " : " << start->second << std::endl;
-
+//    ft::map<int, int>::iterator xx = ft_map.begin();
+//    ft::map<int, int>::iterator start;
+//    start = xx;
+//    ft::map<int, int>::iterator end = ft_map.end();
+//
+//    end++;
+//    if (end == NULL)
+//        std::cout << "HALLO" << std::endl;
+//
+//    std::cout << end->first << " : " << end->second << "?!!?" << std::endl;
+//
+//    std::cout << "PRINT MAP" << std::endl;
+//    for (; start != end; ++start)
+//        std::cout << start->first << " : " << start->second << std::endl;
+//
 //    std::cout << "PRINT MAP reverse" << std::endl;
-
-
-
+//
+//
+//
 //    --end;
-
-    std::cout << end->first << " : " << end->second << std::endl;
-
-//    for (; end != --ft_map.begin(); --end)
+//
+////    std::cout << end->first << " : " << end->second << std::endl;
+//    start = ft_map.begin();
+//
+//    for (; end != start; --end)
 //        std::cout << end->first << " : " << end->second << std::endl;
 
 
@@ -89,22 +90,22 @@ int main() {
     /// MAP
 
     /// TREE
-//    ft::RB_Tree<ft::pair<int, int> > tree;
-//    tree.insert_node(ft::make_pair(11,6), 0);
-//    tree.insert_node(ft::make_pair(2,5), 0);
-//    tree.insert_node(ft::make_pair(13,4), 0);
-//    tree.insert_node(ft::make_pair(4,3), 0);
-//    tree.insert_node(ft::make_pair(15,2), 0);
-//
-//    ft::node<ft::pair<int, int> >* s = tree.search(11);
-////    std::cout << s << "\t" <<  s->key_value->first << " : " << s->key_value->second << std::endl;
-//
-//    tree.printTree();
-//
-//    std::cout << "tree-size: " << tree.size() << std::endl;
-//    tree.delete_node(s);
-//    tree.printTree();
-//    std::cout << "tree-size: " << tree.size() << std::endl;
+    ft::RB_Tree<ft::pair<int, int> > tree;
+    tree.insert_node(ft::make_pair(11,6), 0);
+    tree.insert_node(ft::make_pair(2,5), 0);
+    tree.insert_node(ft::make_pair(13,4), 0);
+    tree.insert_node(ft::make_pair(4,3), 0);
+    tree.insert_node(ft::make_pair(15,2), 0);
+
+    ft::node<ft::pair<int, int> >* s = tree.search(11);
+//    std::cout << s << "\t" <<  s->key_value->first << " : " << s->key_value->second << std::endl;
+
+    tree.printTree();
+
+    std::cout << "tree-size: " << tree.size() << std::endl;
+    tree.delete_node(s);
+    tree.printTree();
+    std::cout << "tree-size: " << tree.size() << std::endl;
     /// TREE
 
 

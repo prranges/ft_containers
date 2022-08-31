@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Iterator_traits.hpp"
+#include "Utility.hpp"
 
 namespace ft {
     template<class T, class Pair> class BD_Iterator {
@@ -19,7 +20,40 @@ namespace ft {
             return max_node(node->right);
         }
 
-
+//        void next() {
+//            if (_node->NIL && _node->begin != _node) _node = _node->begin;
+//            else if (!_node->right->NIL) {
+//                _node = min_node(_node->right);
+//            } else {
+//                T current = _node;
+//                T tmp = _node;
+//                _node = _node->parent;
+//                if (!_node) { _node = current->right; return; }
+//                while (_node->left != tmp) {
+//                    if (!_node->parent) { _node = current->right; break; }
+//                    tmp = _node;
+//                    _node = _node->parent;
+//                }
+//            }
+//        }
+//
+//        void prev() {
+//            if (_node->NIL) _node = _node->parent;
+//            else if (!_node->left->NIL) {
+//                _node = max_node(_node->left);
+//            } else {
+//                T tmp = _node;
+//                _node = _node->parent;
+//                while (_node->right != tmp) {
+//                    tmp = _node;
+//                    if (!_node->parent) {
+//                        _node = tmp->left - 1;
+//                        break;
+//                    }
+//                    _node = _node->parent;
+//                }
+//            }
+//        }
         void next() {
             if (!_node->NIL) {
                 if (!_node->right->NIL){
@@ -37,21 +71,6 @@ namespace ft {
                     _node = parent;
                 }
             }
-//            if (_node->NIL && _node != _node->begin)
-//                _node = _node->begin;
-//            if (!_node->right->NIL) {
-//                _node = min_node(_node->right);
-//            } else {
-//                T current = _node;
-//                T tmp = _node;
-//                _node = _node->parent;
-//                if (!_node) { _node = current->right; return; }
-//                while (_node->left != tmp) {
-//                    if (!_node->parent) { _node = current->right; break; }
-//                    tmp = _node;
-//                    _node = _node->parent;
-//                }
-//            }
         }
 
         void prev() {
@@ -68,25 +87,6 @@ namespace ft {
                 if (!parent->NIL)
                     _node = parent;
             }
-//            if (_node->NIL) {
-//                _node = _node->parent;
-//                std::cout << _node->parent << std::endl;
-//                std::cout << "PIZDEC" << std::endl;
-//            }
-//            else if (!_node->left->NIL) {
-//                _node = max_node(_node->left);
-//            } else {
-//                T tmp = _node;
-//                _node = _node->parent;
-//                while (_node->right != tmp) {
-//                    tmp = _node;
-//                    if (!_node->parent) {
-//                        _node = tmp->left - 1;
-//                        break;
-//                    }
-//                    _node = _node->parent;
-//                }
-//            }
         }
 
     public:
@@ -99,16 +99,23 @@ namespace ft {
         typedef typename iterator_traits<T>::iterator_category  iterator_category;
 
         /// CONSTRUCTORS
-        BD_Iterator() : _node() {}
-        BD_Iterator(T node) : _node(node) {}
-        BD_Iterator(const BD_Iterator& other) : _node(other._node) {}
+//        BD_Iterator() : _node() {}
+//        BD_Iterator(T node) : _node(node) {}
+//        BD_Iterator(const BD_Iterator& other) : _node(other.base()) {}
+//
+
+        BD_Iterator(T value = 0): _node(value) {}
+
+        template<class U>
+        BD_Iterator(const ft::BD_Iterator<U, Pair>& u) : _node(u.base()) {}
+
 
         /// DESTRUCTOR
         ~BD_Iterator() {}
 
         /// OPERATORS
         BD_Iterator& operator= (BD_Iterator const & other) {
-            _node = &(*other._node);
+            _node = other._node;
             return *this;
         }
 

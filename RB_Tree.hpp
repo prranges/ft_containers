@@ -2,6 +2,8 @@
 
 #include "Pair.hpp"
 #include "BD_Iterator.hpp"
+#include <iostream>
+
 
 namespace ft {
     enum node_color { Black, Red };
@@ -21,7 +23,7 @@ namespace ft {
         node(const value_type& n) : key_value(new value_type(n)), color(Black), left(this), right(this), parent(0), NIL(0), begin(NULL) {}
 
         /// Destructor
-        ~node() {}
+        ~node() { delete key_value; }
     };
 
     template<class value_type>
@@ -138,6 +140,8 @@ namespace ft {
             n->left = &nil;
             n->right = &nil;
             n->color = Red;
+            if (n == last()) { nil.parent = n; }
+            if (n == begin()) { nil.begin = n; }
             ++_size;
             insert_fixup(n);
         }
@@ -181,45 +185,90 @@ namespace ft {
             root->color = Black;
         }
 
-        int delete_node(node<value_type>* n) {
-            node<value_type>* x;
-            node<value_type>* y;
-
-            if (!n || n->NIL)
-                return 0;
-            if (n->left->NIL || n->right->NIL) {
-                y = n;
-            } else {
-                y = n->right;
-                while (!y->left->NIL)
-                    y = y->left;
-            }
-            if (!y->left->NIL) {
-                x = y->left;
-            } else
-                x = y->right;
-            x->parent = y->parent;
-            if (y->parent) {
-                if (y == y->parent->left)
-                    y->parent->left = x;
-                else
-                    y->parent->right = x;
-            } else
-                root = x;
-            if (y != n) {
-                delete n->key_value;
-                value_type *p = new value_type(*y->key_value);
-                n->key_value = p;
-            }
-            if (y->color == 0) {
-                delete_fixup (x);
-            }
-            nil.parent = last(); /// added
-            nil.begin = begin(); /// added
-            --_size;
-            delete y;
-            return 1;
+        void transplant(node <value_type> *u, node <value_type> *v){
+            if (u->parent->NIL == true)
+                root = v;
+            else if (u == u->parent->left)
+                u->parent->left = v;
+            else
+                u->parent->right = v;
+            v->parent = u->parent;
         }
+
+        void delete_node(node <value_type> *z) {
+            node <value_type> *y = z;
+            node <value_type> *x;
+            node_color y_color = y->color;
+            if (z->left->NIL == true) {
+                x = z->right;
+                transplant(z, z->right);
+            }
+            else if (z->right->NIL){
+                x = z->left;
+                transplant(z, z->left);
+            }
+            else{
+                y = z->right;
+                while (y->left->NIL == 0)
+                    y = y->left;
+                y_color = y->color;
+                x = y->right;
+                if (y->parent == z)
+                    x->parent = y;
+                else{
+                    transplant(y, y->right);
+                    y->right = z->right;
+                    y->right->parent = y;
+                }
+                transplant(z, y);
+                y->left = z->left;
+                y->left->parent = y;
+                y->color = z->color;
+            }
+            _size--;
+            if (y_color == Black)
+                delete_fixup(x);
+            delete z;
+        }
+//        int delete_node(node<value_type>* n) {
+//            node<value_type>* x;
+//            node<value_type>* y;
+//
+//            if (!n || n->NIL)
+//                return 0;
+//            if (n->left->NIL || n->right->NIL) {
+//                y = n;
+//            } else {
+//                y = n->right;
+//                while (!y->left->NIL)
+//                    y = y->left;
+//            }
+//            if (!y->left->NIL) {
+//                x = y->left;
+//            } else
+//                x = y->right;
+//            x->parent = y->parent;
+//            if (y->parent) {
+//                if (y == y->parent->left)
+//                    y->parent->left = x;
+//                else
+//                    y->parent->right = x;
+//            } else
+//                root = x;
+//            if (y != n) {
+//                delete n->key_value;
+//                value_type *p = new value_type(*y->key_value);
+//                n->key_value = p;
+//            }
+//            if (y->color == 0) {
+//                delete_fixup (x);
+//            }
+//            nil.parent = last(); /// added
+//            nil.begin = begin(); /// added
+//            --_size;
+//            delete y;
+//            return 1;
+//        }
 
         void delete_fixup(node<value_type>* x) {
             while (x != root && x->color == Black) {
@@ -360,15 +409,15 @@ namespace ft {
             std::cout << (isLeft ? "├──" : "└──" );
 
             if (nodeV->NIL){
-                std::cout <<"\033[0;36m"<< "nil" << "\033[0m"<<std::endl;
+                std::cout <<"\033[0;36m"<< "nil - parent: " << nodeV->parent << "\033[0m"<<std::endl;
                 return ;
             }
 
             // print the value of the node
             if (nodeV->color == 0)
-                std::cout <<"\033[0;36m"<< nodeV->key_value->first <<"\033[0m"<<std::endl;
+                std::cout <<"\033[0;36m"<< nodeV->key_value->first << " " << nodeV->key_value <<"\033[0m"<<std::endl;
             else
-                std::cout <<"\033[0;31m"<< nodeV->key_value->first << "\033[0m"<<std::endl;
+                std::cout <<"\033[0;31m"<< nodeV->key_value->first << " " << nodeV->key_value << "\033[0m"<<std::endl;
             printBT( prefix + (isLeft ? "│   " : "    "), nodeV->left, true);
             printBT( prefix + (isLeft ? "│   " : "    "), nodeV->right, false);
         }
