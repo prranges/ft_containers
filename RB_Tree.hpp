@@ -28,11 +28,10 @@ namespace ft {
 
     template<class value_type>
     class RB_Tree {
-    private:
+    public:
         node<value_type> nil;
         node<value_type>* root;
         size_t _size;
-    public:
         typedef typename value_type::first_type	    key_type;
         typedef typename value_type::second_type    mapped_type;
 
@@ -75,6 +74,7 @@ namespace ft {
         }
 
         void clear () {
+//            printTree();
             clear_node(root);
             root = &nil;
             nil.parent = NULL;
