@@ -37,6 +37,42 @@ namespace ft {
             }
         }
 
+//        void next() {
+//            if (_node->NIL && _node->begin != _node) _node = _node->begin;
+//            else if (!_node->right->NIL) {
+//                _node = min_node(_node->right);
+//            } else {
+//                T current = _node;
+//                T tmp = _node;
+//                _node = _node->parent;
+//                if (!_node) { _node = current->right; return; }
+//                while (_node->left != tmp) {
+//                    if (!_node->parent) { node = current->right; break; }
+//                    tmp = _node;
+//                    _node = _node->parent;
+//                }
+//            }
+//        }
+
+//        void prev() {
+//            if (_node->NIL)
+//                _node = _node->parent;
+//            else if (!_node->left->NIL) {
+//                _node = max_node(_node->left);
+//            } else {
+//                T tmp = _node;
+//                _node = _node->parent;
+//                while (_node->right != tmp) {
+//                    tmp = _node;
+//                    if (!_node->parent) {
+//                        _node = tmp->left - 1;
+//                        break;
+//                    }
+//                    _node = _node->parent;
+//                }
+//            }
+//        }
+
         void prev()
         {
             if (_node->NIL && _node == _node->parent->right) {
