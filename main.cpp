@@ -19,15 +19,17 @@ int main() {
 //    std::cout << node.left << " : " << node.right << std::endl;
 
     /// FT_MAP
-    ft::map<int, int> ft_map1;
+    ft::map<int, int, std::greater<int> > ft_map1;
     ft_map1.insert(ft::make_pair(5, 5000));
     ft_map1.insert(ft::make_pair(1, 1000));
     ft_map1.insert(ft::make_pair(3, 3000));
     ft_map1.insert(ft::make_pair(2, 2000));
     ft_map1.insert(ft::make_pair(4, 4000));
+    ft_map1.erase(5);
+    ft_map1.erase(4);
 
-    ft::map<int, int> ft_map2(ft_map1);
-    ft::map<int, int> ft_map(ft_map2.begin(), ft_map2.end());
+    ft::map<int, int, std::greater<int> > ft_map2(ft_map1);
+    ft::map<int, int, std::greater<int> > ft_map(ft_map2.begin(), ft_map2.end());
 
 //    ft_map[1] = 1234;
 //    std::cout << "[1] - " << ft_map[1] << std::endl;

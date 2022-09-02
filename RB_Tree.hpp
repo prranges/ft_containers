@@ -65,7 +65,7 @@ namespace ft {
             return *this;
         }
 
-        void clear_node(node<value_type> *n) {
+        void clear_node (node<value_type> *n) {
             if (!n->NIL){
                 clear_node(n->right);
                 clear_node(n->left);
@@ -74,7 +74,6 @@ namespace ft {
         }
 
         void clear () {
-//            printTree();
             clear_node(root);
             root = &nil;
             nil.parent = NULL;
@@ -116,30 +115,27 @@ namespace ft {
             x->parent = y;
         }
 
-        void insert_node(const value_type &key_value, node<value_type>* x) {
+        template<class Compare>
+        void insert_node(const value_type &value, node<value_type>* x, Compare& _comp) {
             if (x == 0)
                 x = root;
-            node<value_type>* n = new node<value_type>(key_value);
+            node<value_type>* n = new node<value_type>(value);
             node<value_type>* y = &nil;
 
-            while (!x->NIL)
-            {
+            while (!x->NIL) {
                 y = x;
-                if (n->key_value->first < x->key_value->first)
-                    x = x->left;
-                else
-                    x = x->right;
+                x = _comp(value.first, x->key_value->first) ? x->left : x->right;
             }
             n->parent = y;
-            if (y->NIL)
-                root = n;
-            else if (n->key_value->first < y->key_value->first)
-                y->left = n;
-            else
-                y->right = n;
             n->left = &nil;
             n->right = &nil;
             n->color = Red;
+            if (y->NIL)
+                root = n;
+            else if (_comp(n->key_value->first, y->key_value->first))
+                y->left = n;
+            else
+                y->right = n;
             if (n == last()) { nil.parent = n; }
             if (n == begin()) { nil.begin = n; }
             ++_size;
@@ -185,8 +181,136 @@ namespace ft {
             root->color = Black;
         }
 
-        void transplant(node <value_type> *u, node <value_type> *v){
-            if (u->parent->NIL == true)
+//        void delete_fixup(node<value_type> *x) {
+//            while (x != root && x->color == Black) {
+//                if (x == x->parent->left) {
+//                    node<value_type> *w = x->parent->right;
+//                    if (w->color == Red) {
+//                        w->color = Black;
+//                        x->parent->color = Red;
+//                        left_rotate (x->parent);
+//                        w = x->parent->right;
+//                    }
+//                    if (w->left->color == Black && w->right->color == Black) {
+//                        w->color = Red;
+//                        x = x->parent;
+//                    } else {
+//                        if (w->right->color == Black) {
+//                            w->left->color = Black;
+//                            w->color = Red;
+//                            right_rotate (w);
+//                            w = x->parent->right;
+//                        }
+//                        w->color = x->parent->color;
+//                        x->parent->color = Black;
+//                        w->right->color = Black;
+//                        left_rotate (x->parent);
+//                        x = root;
+//                    }
+//                } else {
+//                    node<value_type> *w = x->parent->left;
+//                    if (w->color == Red) {
+//                        w->color = Black;
+//                        x->parent->color = Red;
+//                        right_rotate (x->parent);
+//                        w = x->parent->left;
+//                    }
+//                    if (w->right->color == Black && w->left->color == Black) {
+//                        w->color = Red;
+//                        x = x->parent;
+//                    } else {
+//                        if (w->left->color == Black) {
+//                            w->right->color = Black;
+//                            w->color = Red;
+//                            left_rotate (w);
+//                            w = x->parent->left;
+//                        }
+//                        w->color = x->parent->color;
+//                        x->parent->color = Black;
+//                        w->left->color = Black;
+//                        right_rotate (x->parent);
+//                        x = root;
+//                    }
+//                }
+//            }
+//            x->color = Black;
+//        }
+//
+//        int delete_node(node<value_type> *z) {
+//            node<value_type> *x, *y;
+//
+//            if (!z || z->NIL)
+//                return 0;
+//            if (z->left->NIL || z->right->NIL) {
+//                y = z;
+//            } else {
+//                y = z->right;
+//                while (!y->left->NIL)
+//                    y = y->left;
+//            }
+//
+//            if (!y->left->NIL) {
+//                x = y->left;
+//            }
+//            else {
+//                x = y->right;
+//            }
+//
+//            x->parent = y->parent;
+//
+//            if (y->parent) {
+//                if (y == y->parent->left) {
+//                    y->parent->left = x;
+//                }
+//                else {
+//                    y->parent->right = x;
+//                }
+//            }
+//            else {
+//                root = x;
+//            }
+//            if (y != z) {
+//                delete z->key_value;
+//                value_type *p = new value_type(*y->key_value);
+//                z->key_value = p;
+//            }
+//
+//            if (y->color == 0) {
+//                delete_fixup (x);
+//            }
+//            nil.parent = last();
+//            nil.begin = begin();
+//            _size--;
+//            delete y;
+//            return 1;
+//        }
+//
+//        node<value_type>* getBegin() {
+//            node<value_type>* tmp = root;
+//            while (!tmp->left->NIL) {
+//                tmp = tmp->left;
+//            }
+//            return tmp;
+//        }
+//
+//        node<value_type>* getLast() {
+//            node<value_type>* tmp = root;
+//            while (!tmp->right->NIL) {
+//                tmp = tmp->right;
+//            }
+//            return tmp;
+//        }
+//
+//        node<value_type>* getEnd() {
+//            node<value_type>* tmp = root;
+//            while (!tmp->right->NIL) {
+//                tmp = tmp->right;
+//            }
+//            return tmp->right;
+//        }
+
+        void transplant(node <value_type> *u, node <value_type> *v) {
+            if (u->parent->NIL)
                 root = v;
             else if (u == u->parent->left)
                 u->parent->left = v;
@@ -199,17 +323,17 @@ namespace ft {
             node <value_type> *y = z;
             node <value_type> *x;
             node_color y_color = y->color;
-            if (z->left->NIL == true) {
+            if (z->left->NIL) {
                 x = z->right;
                 transplant(z, z->right);
             }
-            else if (z->right->NIL){
+            else if (z->right->NIL) {
                 x = z->left;
                 transplant(z, z->left);
             }
             else{
                 y = z->right;
-                while (y->left->NIL == 0)
+                while (!y->left->NIL)
                     y = y->left;
                 y_color = y->color;
                 x = y->right;
@@ -228,47 +352,10 @@ namespace ft {
             _size--;
             if (y_color == Black)
                 delete_fixup(x);
+            nil.parent = last();
+            nil.begin = begin();
             delete z;
         }
-//        int delete_node(node<value_type>* n) {
-//            node<value_type>* x;
-//            node<value_type>* y;
-//
-//            if (!n || n->NIL)
-//                return 0;
-//            if (n->left->NIL || n->right->NIL) {
-//                y = n;
-//            } else {
-//                y = n->right;
-//                while (!y->left->NIL)
-//                    y = y->left;
-//            }
-//            if (!y->left->NIL) {
-//                x = y->left;
-//            } else
-//                x = y->right;
-//            x->parent = y->parent;
-//            if (y->parent) {
-//                if (y == y->parent->left)
-//                    y->parent->left = x;
-//                else
-//                    y->parent->right = x;
-//            } else
-//                root = x;
-//            if (y != n) {
-//                delete n->key_value;
-//                value_type *p = new value_type(*y->key_value);
-//                n->key_value = p;
-//            }
-//            if (y->color == 0) {
-//                delete_fixup (x);
-//            }
-//            nil.parent = last(); /// added
-//            nil.begin = begin(); /// added
-//            --_size;
-//            delete y;
-//            return 1;
-//        }
 
         void delete_fixup(node<value_type>* x) {
             while (x != root && x->color == Black) {

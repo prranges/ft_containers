@@ -22,15 +22,13 @@ namespace ft {
 
         void next() {
             if (!_node->NIL) {
-                if (!_node->right->NIL){
+                if (!_node->right->NIL) {
                     _node = _node->right;
                     while (!_node->left->NIL)
                         _node = _node->left;
-                }
-                else{
+                } else {
                     T parent = _node->parent;
-                    while(!parent->NIL && _node == parent->right)
-                    {
+                    while (!parent->NIL && _node == parent->right) {
                         _node = parent;
                         parent = parent->parent;
                     }
@@ -43,18 +41,15 @@ namespace ft {
         {
             if (_node->NIL && _node == _node->parent->right) {
                 _node = _node->parent;
-            }
-            else if (!_node->left->NIL)
+            } else if (!_node->left->NIL)
                 _node = max_node(_node->left);
-            else
-            {
+            else {
                 T parent = _node->parent;
                 while (parent && _node == parent->left)
                     _node = _node->parent;
                 _node = _node->parent;
             }
         }
-
 
     public:
         typedef typename iterator_traits<T*>::difference_type   difference_type;
@@ -70,10 +65,6 @@ namespace ft {
 
         template<class U>
         BD_Iterator(const BD_Iterator<U, Pair>& other) : _node(other.base()) {}
-
-//        template <class U, class Z>
-//        BD_Iterator(const BD_Iterator<U, Z>& other, typename ft::enable_if<std::is_convertible<U, T>::value>::type* = 0): _node(other.base()) 								{};
-
 
         /// DESTRUCTOR
         ~BD_Iterator() {}
