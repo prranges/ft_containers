@@ -51,14 +51,14 @@ namespace ft {
         key_compare         _compare;
     public:
         /// Constructors
-//        // empty
+        // empty
         explicit map (const Compare& comp = Compare(), const allocator_type& alloc = tree_allocator_type()) :
         _alloc(alloc), _compare(comp) {
             _tree = _tree_alloc.allocate(sizeof(tree_type));
             _tree_alloc.construct(_tree);
         }
 
-//        // range
+        // range
         template <class Iterator>
         map (Iterator first, Iterator last, const Compare& comp = Compare(), const allocator_type& alloc = allocator_type()) :
             _alloc(alloc), _compare(comp) {
@@ -68,13 +68,14 @@ namespace ft {
                 insert(*first);
         }
 
-//        // copy
+        // copy
         map (const map& other) : _alloc(other._alloc), _compare(other._compare) {
             _tree = _tree_alloc.allocate(sizeof(tree_type));
             _tree_alloc.construct(_tree, *(other._tree));
             copy_nodes(other._tree->root);
         }
 
+    private:
         void copy_nodes(node<value_type> *t) {
             if (!t->left->NIL)
                 copy_nodes(t->left);
@@ -83,9 +84,10 @@ namespace ft {
                 copy_nodes(t->right);
         }
 
+    public:
+
         /// Destructor
         ~map() {
-//            _tree->printTree();
             clear();
             _tree_alloc.destroy(_tree);
             _tree_alloc.deallocate(_tree, sizeof(tree_type));
@@ -103,19 +105,50 @@ namespace ft {
         }
 
         /// Iterators
-        iterator begin() { return iterator (_tree->begin()); }
-        const_iterator begin() const { return const_iterator (_tree->begin()); }
-        iterator end() { return iterator(_tree->end()); }
-        const_iterator end() const { return const_iterator(_tree->end()); }
-        reverse_iterator rbegin() { return reverse_iterator(_tree->end()); }
-        const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree->end()); }
-        reverse_iterator rend() { return reverse_iterator(_tree->begin()); }
-        const_reverse_iterator rend() const { return const_reverse_iterator(_tree->begin()); }
+        iterator begin() {
+            return iterator (_tree->begin());
+        }
+
+        const_iterator begin() const {
+            return const_iterator (_tree->begin());
+        }
+
+        iterator end() {
+            return iterator(_tree->end());
+        }
+
+        const_iterator end() const {
+            return const_iterator(_tree->end());
+        }
+
+        reverse_iterator rbegin() {
+            return reverse_iterator(_tree->end());
+        }
+
+        const_reverse_iterator rbegin() const {
+            return const_reverse_iterator(_tree->end());
+        }
+
+        reverse_iterator rend() {
+            return reverse_iterator(_tree->begin());
+        }
+
+        const_reverse_iterator rend() const {
+            return const_reverse_iterator(_tree->begin());
+        }
 
         /// Capacity
-        bool empty() const { return _tree->size() == 0; }
-        size_type size() const { return _tree->size(); }
-        size_type max_size() const { return _node_alloc.max_size(); }
+        bool empty() const {
+            return _tree->size() == 0;
+        }
+
+        size_type size() const {
+            return _tree->size();
+        }
+
+        size_type max_size() const {
+            return _node_alloc.max_size();
+        }
 
         /// Element access
         mapped_type& operator[] (const key_type& k) {
@@ -157,13 +190,13 @@ namespace ft {
                 insert(*first);
         }
 
-        // erase (1)
+        // erase - position
         void erase (iterator position) {
             iterator tmp = position;
             _tree->delete_node(tmp.base());
         }
 
-        // erase (2)
+        // erase - key
         size_type erase (const key_type& key) {
             node<value_type> *tmp = find(key).base();
             if (!tmp->NIL) {
@@ -173,7 +206,7 @@ namespace ft {
             return 0;
         }
 
-        // erase (3)
+        // erase - range
         void erase (iterator first, iterator last) {
             iterator tmp;
 
@@ -183,12 +216,10 @@ namespace ft {
             }
         }
 
-        // swap
         void swap (map& other) {
             std::swap(_tree, other._tree);
         }
 
-        // clear
         void clear() {
             _tree->clear();
         }

@@ -34,7 +34,7 @@ namespace ft {
             _pointer(0),
             _alloc(alloc) {}
 
-//            // fill
+        // fill
         explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) {
             if (n > this->max_size())
                 throw (std::length_error("vector"));
@@ -45,7 +45,7 @@ namespace ft {
                 _alloc.construct(_pointer + i, val);
         }
 
-//            // range
+        // range
         template <class Iterator> vector (Iterator first, Iterator last, const allocator_type& alloc = allocator_type(),
         typename ft::enable_if<!ft::is_integral<Iterator>::value, void>::type* = 0) :
             _capacity(0),
@@ -55,7 +55,7 @@ namespace ft {
             this->assign(first, last);
         };
 
-//            // copy
+        // copy
         vector(const vector& other) : _pointer(0), _capacity(other._capacity), _size(other._size), _alloc(other.get_allocator()) {
             _pointer = _alloc.allocate(other._capacity);
             for (size_t i = 0; i < _size; ++i)
@@ -86,22 +86,44 @@ namespace ft {
 
 
         /// ITERATORS
-        iterator begin() { return iterator(_pointer); }
-        const_iterator begin() const { return const_iterator(_pointer); }
-        iterator end() { return iterator(_pointer + _size); }
-        const_iterator end() const { return const_iterator(_pointer); }
-        reverse_iterator rbegin() { return reverse_iterator(end()); }
-        const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
-        reverse_iterator rend() { return reverse_iterator(begin()); }
-        const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+        iterator begin() {
+            return iterator(_pointer);
+        }
+
+        const_iterator begin() const {
+            return const_iterator(_pointer);
+        }
+
+        iterator end() {
+            return iterator(_pointer + _size);
+        }
+
+        const_iterator end() const {
+            return const_iterator(_pointer);
+        }
+
+        reverse_iterator rbegin() {
+            return reverse_iterator(end());
+        }
+
+        const_reverse_iterator rbegin() const {
+            return const_reverse_iterator(end()); }
+        reverse_iterator rend() { return reverse_iterator(begin());
+        }
+
+        const_reverse_iterator rend() const {
+            return const_reverse_iterator(begin());
+        }
 
         /// CAPACITY
         size_type size() const {
             return _size;
         }
+
         size_type max_size() const {
             return _alloc.max_size();
         }
+
         void resize (size_type n, value_type val = value_type()) {
             if (n > this->max_size())
                 throw (std::length_error("vector"));
@@ -119,12 +141,15 @@ namespace ft {
                 }
             }
         }
+
         size_type capacity() const {
             return _capacity;
         }
+
         bool empty() const {
             return _size == 0;
         }
+
         void reserve (size_type n) {
             if (n > _capacity) {
                 pointer tmp;
@@ -154,28 +179,35 @@ namespace ft {
         reference operator[] (size_type n) {
             return *(_pointer + n);
         }
+
         const_reference operator[] (size_type n) const {
             return *(_pointer + n);
         }
+
         reference at (size_type n) {
             if(n >= _capacity)
                 throw std::out_of_range("vector");
             return *(_pointer + n);
         }
+
         const_reference at (size_type n) const {
             if(n >= _capacity)
                 throw std::out_of_range("vector");
             return *(_pointer + n);
         }
+
         reference front() {
             return *_pointer;
         }
+
         const_reference front() const {
             return *_pointer;
         }
+
         reference back() {
             return *(_pointer + _size - 1);
         }
+
         const_reference back() const {
             return *(_pointer + _size - 1);
         }
@@ -350,7 +382,6 @@ namespace ft {
             return lhs[i] < rhs[i];
         }
         return false;
-//        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
     }
 
     template <class T, class Allocator>

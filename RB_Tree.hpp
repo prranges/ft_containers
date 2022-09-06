@@ -10,7 +10,7 @@ namespace ft {
 
     template<class value_type>
     struct node {
-        value_type* key_value; // pair
+        value_type* key_value;
         node_color  color;
         node*       left;
         node*       right;
@@ -361,52 +361,8 @@ namespace ft {
             return tmp->right;
         }
 
-//        template<class T>
-//        node<value_type>* search(T key) {
-//            node<value_type>* n = &nil;
-//            node<value_type>* node = root;
-//
-//            while (!node->NIL) {
-//                n = node;
-//                if (node->key_value->first == key)
-//                    return node;
-//                if (key < node->key_value->first)
-//                    node = node->left;
-//                else
-//                    node = node->right;
-//            }
-//            return node;
-//        }
-
         size_t size() const {
             return _size;
-        }
-
-
-
-
-
-
-        void printBT(const std::string& prefix, const node<value_type>* nodeV, bool isLeft) const {
-            std::cout << prefix;
-            std::cout << (isLeft ? "├──" : "└──" );
-
-            if (nodeV->NIL){
-                std::cout <<"\033[0;36m"<< "nil - parent: " << nodeV->parent << "\033[0m"<<std::endl;
-                return ;
-            }
-
-            // print the value of the node
-            if (nodeV->color == 0)
-                std::cout <<"\033[0;36m"<< nodeV->key_value->first << " " << nodeV->key_value <<"\033[0m"<<std::endl;
-            else
-                std::cout <<"\033[0;31m"<< nodeV->key_value->first << " " << nodeV->key_value << "\033[0m"<<std::endl;
-            printBT( prefix + (isLeft ? "│   " : "    "), nodeV->left, true);
-            printBT( prefix + (isLeft ? "│   " : "    "), nodeV->right, false);
-        }
-
-        void printTree(){
-            printBT("" , root, false);
         }
     };
 }

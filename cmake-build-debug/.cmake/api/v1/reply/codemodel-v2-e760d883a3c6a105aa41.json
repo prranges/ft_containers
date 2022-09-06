@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/prranges/projects/ft_containers/cmake-build-debug",
-		"source" : "/Users/prranges/projects/ft_containers"
+		"build" : "/Users/prranges/conteiners/cmake-build-debug",
+		"source" : "/Users/prranges/conteiners"
 	},
 	"version" : 
 	{
