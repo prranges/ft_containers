@@ -32,8 +32,6 @@ namespace ft {
         node<value_type> nil;
         node<value_type>* root;
         size_t _size;
-        typedef typename value_type::first_type	    key_type;
-        typedef typename value_type::second_type    mapped_type;
 
         /// Constructors
         RB_Tree() : _size(0) {
@@ -142,6 +140,33 @@ namespace ft {
             insert_fixup(n);
         }
 
+        template<class Compare>
+        void insert_node_set(const value_type &value, node<value_type>* x, Compare& _comp) {
+            if (x == 0)
+                x = root;
+            node<value_type>* n = new node<value_type>(value);
+            node<value_type>* y = &nil;
+
+            while (!x->NIL) {
+                y = x;
+                x = _comp(value, *x->key_value) ? x->left : x->right;
+            }
+            n->parent = y;
+            n->left = &nil;
+            n->right = &nil;
+            n->color = Red;
+            if (y->NIL)
+                root = n;
+            else if (_comp(*n->key_value, *y->key_value))
+                y->left = n;
+            else
+                y->right = n;
+            if (n == last()) { nil.parent = n; }
+            if (n == begin()) { nil.begin = n; }
+            ++_size;
+            insert_fixup(n);
+        }
+
         void insert_fixup(node<value_type>* x) {
             while (x != root && x->parent->color == Red) {
                 if (x->parent == x->parent->parent->left) {
@@ -181,135 +206,7 @@ namespace ft {
             root->color = Black;
         }
 
-//        void delete_fixup(node<value_type> *x) {
-//            while (x != root && x->color == Black) {
-//                if (x == x->parent->left) {
-//                    node<value_type> *w = x->parent->right;
-//                    if (w->color == Red) {
-//                        w->color = Black;
-//                        x->parent->color = Red;
-//                        left_rotate (x->parent);
-//                        w = x->parent->right;
-//                    }
-//                    if (w->left->color == Black && w->right->color == Black) {
-//                        w->color = Red;
-//                        x = x->parent;
-//                    } else {
-//                        if (w->right->color == Black) {
-//                            w->left->color = Black;
-//                            w->color = Red;
-//                            right_rotate (w);
-//                            w = x->parent->right;
-//                        }
-//                        w->color = x->parent->color;
-//                        x->parent->color = Black;
-//                        w->right->color = Black;
-//                        left_rotate (x->parent);
-//                        x = root;
-//                    }
-//                } else {
-//                    node<value_type> *w = x->parent->left;
-//                    if (w->color == Red) {
-//                        w->color = Black;
-//                        x->parent->color = Red;
-//                        right_rotate (x->parent);
-//                        w = x->parent->left;
-//                    }
-//                    if (w->right->color == Black && w->left->color == Black) {
-//                        w->color = Red;
-//                        x = x->parent;
-//                    } else {
-//                        if (w->left->color == Black) {
-//                            w->right->color = Black;
-//                            w->color = Red;
-//                            left_rotate (w);
-//                            w = x->parent->left;
-//                        }
-//                        w->color = x->parent->color;
-//                        x->parent->color = Black;
-//                        w->left->color = Black;
-//                        right_rotate (x->parent);
-//                        x = root;
-//                    }
-//                }
-//            }
-//            x->color = Black;
-//        }
-//
-//        int delete_node(node<value_type> *z) {
-//            node<value_type> *x, *y;
-//
-//            if (!z || z->NIL)
-//                return 0;
-//            if (z->left->NIL || z->right->NIL) {
-//                y = z;
-//            } else {
-//                y = z->right;
-//                while (!y->left->NIL)
-//                    y = y->left;
-//            }
-//
-//            if (!y->left->NIL) {
-//                x = y->left;
-//            }
-//            else {
-//                x = y->right;
-//            }
-//
-//            x->parent = y->parent;
-//
-//            if (y->parent) {
-//                if (y == y->parent->left) {
-//                    y->parent->left = x;
-//                }
-//                else {
-//                    y->parent->right = x;
-//                }
-//            }
-//            else {
-//                root = x;
-//            }
-//            if (y != z) {
-//                delete z->key_value;
-//                value_type *p = new value_type(*y->key_value);
-//                z->key_value = p;
-//            }
-//
-//            if (y->color == 0) {
-//                delete_fixup (x);
-//            }
-//            nil.parent = last();
-//            nil.begin = begin();
-//            _size--;
-//            delete y;
-//            return 1;
-//        }
-//
-//        node<value_type>* getBegin() {
-//            node<value_type>* tmp = root;
-//            while (!tmp->left->NIL) {
-//                tmp = tmp->left;
-//            }
-//            return tmp;
-//        }
-//
-//        node<value_type>* getLast() {
-//            node<value_type>* tmp = root;
-//            while (!tmp->right->NIL) {
-//                tmp = tmp->right;
-//            }
-//            return tmp;
-//        }
-//
-//        node<value_type>* getEnd() {
-//            node<value_type>* tmp = root;
-//            while (!tmp->right->NIL) {
-//                tmp = tmp->right;
-//            }
-//            return tmp->right;
-//        }
-
-        void transplant(node <value_type> *u, node <value_type> *v) {
+        void swich_node(node <value_type> *u, node <value_type> *v) {
             if (u->parent->NIL)
                 root = v;
             else if (u == u->parent->left)
@@ -325,13 +222,11 @@ namespace ft {
             node_color y_color = y->color;
             if (z->left->NIL) {
                 x = z->right;
-                transplant(z, z->right);
-            }
-            else if (z->right->NIL) {
+                swich_node(z, z->right);
+            } else if (z->right->NIL) {
                 x = z->left;
-                transplant(z, z->left);
-            }
-            else{
+                swich_node(z, z->left);
+            } else {
                 y = z->right;
                 while (!y->left->NIL)
                     y = y->left;
@@ -340,11 +235,11 @@ namespace ft {
                 if (y->parent == z)
                     x->parent = y;
                 else{
-                    transplant(y, y->right);
+                    swich_node(y, y->right);
                     y->right = z->right;
                     y->right->parent = y;
                 }
-                transplant(z, y);
+                swich_node(z, y);
                 y->left = z->left;
                 y->left->parent = y;
                 y->color = z->color;
@@ -466,21 +361,22 @@ namespace ft {
             return tmp->right;
         }
 
-        node<value_type>* search(key_type key) {
-            node<value_type>* n = &nil;
-            node<value_type>* node = root;
-
-            while (!node->NIL) {
-                n = node;
-                if (node->key_value->first == key)
-                    return node;
-                if (key < node->key_value->first)
-                    node = node->left;
-                else
-                    node = node->right;
-            }
-            return node;
-        }
+//        template<class T>
+//        node<value_type>* search(T key) {
+//            node<value_type>* n = &nil;
+//            node<value_type>* node = root;
+//
+//            while (!node->NIL) {
+//                n = node;
+//                if (node->key_value->first == key)
+//                    return node;
+//                if (key < node->key_value->first)
+//                    node = node->left;
+//                else
+//                    node = node->right;
+//            }
+//            return node;
+//        }
 
         size_t size() const {
             return _size;

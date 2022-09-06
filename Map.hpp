@@ -1,6 +1,5 @@
 #pragma once
 
-#include <utility>
 #include "Iterator_traits.hpp"
 #include "BD_Iterator.hpp"
 #include "RE_Iterator.hpp"
@@ -120,10 +119,10 @@ namespace ft {
 
         /// Element access
         mapped_type& operator[] (const key_type& k) {
-            node<value_type>* tmp = _tree->search(k);
+            node<value_type>* tmp = find(k).base();
             if (tmp->NIL) {
                 _tree->insert_node(ft::make_pair(k, mapped_type()), _tree->root, _compare);
-                tmp = _tree->search(k);
+                tmp = find(k).base();
             }
             return tmp->key_value->second;
         }
@@ -131,12 +130,12 @@ namespace ft {
         /// Modifiers
         // insert - single element
         pair<iterator, bool> insert (const value_type& n) {
-           node<value_type>* tmp = _tree->search(n.first);
+           node<value_type>* tmp = find(n.first).base();
 
            bool search_result = 0;
            if (tmp->NIL) {
                _tree->insert_node(n, _tree->root, _compare);
-               tmp = _tree->search(n.first);
+               tmp = find(n.first).base();
                search_result = 1;
            }
             return pair<iterator, bool>(iterator(tmp), search_result);
@@ -144,11 +143,11 @@ namespace ft {
 
         // insert - with hint
         iterator insert (iterator position, const value_type& n) {
-            node<value_type>* tmp = _tree->search(n.first);
+            node<value_type>* tmp = find(n.first).base();
 
             if (tmp->NIL)
                 insert(n);
-            return iterator(_tree->search(n.first));
+            return iterator(find(n.first).base());
         }
 
         // insert - range
