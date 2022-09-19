@@ -175,9 +175,8 @@ namespace ft {
         }
 
         // insert - with hint
-        iterator insert (iterator position, const value_type& n) {
+        iterator insert (iterator, const value_type& n) {
             node<value_type>* tmp = find(n.first).base();
-
             if (tmp->NIL)
                 insert(n);
             return iterator(find(n.first).base());

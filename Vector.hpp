@@ -31,8 +31,8 @@ namespace ft {
         explicit vector (const allocator_type& alloc = allocator_type()) :
             _size(0),
             _capacity(0),
-            _pointer(0),
-            _alloc(alloc) {}
+            _alloc(alloc),
+            _pointer(0) {}
 
         // fill
         explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) {
@@ -48,15 +48,16 @@ namespace ft {
         // range
         template <class Iterator> vector (Iterator first, Iterator last, const allocator_type& alloc = allocator_type(),
         typename ft::enable_if<!ft::is_integral<Iterator>::value, void>::type* = 0) :
-            _capacity(0),
             _size(0),
+            _capacity(0),
             _alloc(alloc) {
             _pointer = _alloc.allocate(_capacity);
             this->assign(first, last);
         };
 
         // copy
-        vector(const vector& other) : _pointer(0), _capacity(other._capacity), _size(other._size), _alloc(other.get_allocator()) {
+        vector(const vector& other) : _size(other._size), _capacity(other._capacity), _pointer(0) {
+            _alloc = other.get_allocator();
             _pointer = _alloc.allocate(other._capacity);
             for (size_t i = 0; i < _size; ++i)
                 _pointer[i] = other._pointer[i];
@@ -253,8 +254,8 @@ namespace ft {
 
         // insert -  fill
         void insert( iterator position, size_type n, const value_type& val) {
-            difference_type dist = position - begin();
-            difference_type new_size = _size + n;
+            size_type dist = position - begin();
+            size_type new_size = _size + n;
             if (n >= _capacity) {
                 reserve(_capacity + n);
                 _size = new_size;
@@ -264,7 +265,7 @@ namespace ft {
                         reserve(_capacity * 2);
                 }
             }
-            for (size_t i = _size; i > 0; --i) {
+            for (size_type i = _size; i > 0; --i) {
                 for (; n > 0 && i < dist + n && i >= dist; --n, --i) {
                     _pointer[i] = val;
                 }
@@ -310,7 +311,7 @@ namespace ft {
                             reserve(_capacity * 2);
                     }
                 }
-            for (int i = _size - 1; i >= 0; --i) {
+            for (size_t i = _size - 1; i >= 0; --i) {
                 if (i == dist + range - 1) {
                     for (; range > 0; --range, --i) {
                         _pointer[i] = *--last;

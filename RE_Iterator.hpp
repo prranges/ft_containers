@@ -10,15 +10,17 @@ namespace ft {
             typedef typename iterator_traits<T>::value_type         value_type;
             typedef typename iterator_traits<T>::difference_type    difference_type;
             typedef typename iterator_traits<T>::pointer            pointer;
+            typedef typename iterator_traits<T>::const_pointer      const_pointer;
             typedef typename iterator_traits<T>::reference          reference;
+            typedef typename iterator_traits<T>::const_reference    const_reference;
             typedef typename iterator_traits<T>::iterator_category  iterator_category;
 
         /// CONSTRUCTORS
         RE_Iterator() : _base_iterator() {}
-        explicit RE_Iterator(iterator_type iter) : _base_iterator(iter) {}
+        explicit RE_Iterator(iterator_type iter = nullptr) : _base_iterator(iter) {}
 
-        template <class Iter>
-        RE_Iterator(const RE_Iterator& other) : _base_iterator(other._base()) {}
+        template <class U>
+        RE_Iterator(const RE_Iterator<U>& other) : _base_iterator(other.base()) {}
 
         /// DESTRUCTOR
         virtual ~RE_Iterator() {}
